@@ -1,0 +1,32 @@
+# Config
+eternallyoverburdened.general.weights.armoradjustments=Armor Adjustments
+eternallyoverburdened.general.weights.capabilityblacklist=Capability Blacklist
+eternallyoverburdened.general.weights.enchantmentadjustments=Enchantment Adjustments
+eternallyoverburdened.general.weights.fluidweights=Fluid Weights
+eternallyoverburdened.general.weights.itemweights=Item Weights
+eternallyoverburdened.general.weights.potionAdjustments=Potion Adjustments
+
+# Chat
+chat.eternallyoverburdened:injured=You have injured yourself carrying too much weight.
+chat.eternallyoverburdened:injured_again=You have further injured yourself carrying too much weight.
+chat.eternallyoverburdened:injured_increased=You have further exacerbated your injury.
+chat.eternallyoverburdened:pickup_failed=You are overburdened. Interact with the item to pick it up.
+
+# Enchantments
+enchantment.eternallyoverburdened:pack_mule=Pack Mule
+
+# Items
+item.eternallyoverburdened:splint.name=Splint
+
+# Potions
+eternallyoverburdened:injured=§cInjured
+eternallyoverburdened:overburdened=§cOverburdened
+
+# Tooltips
+tooltip.eternallyoverburdened:carry_weight_adjustment.info=%s%s %s Carry Weight
+tooltip.eternallyoverburdened:equipped.desc=When Equipped:
+tooltip.eternallyoverburdened:fluid_weight.info=Fluid Weight: %s %s
+tooltip.eternallyoverburdened:inventory_weight.info=Inventory Weight: %s %s
+tooltip.eternallyoverburdened:item_weight.info=Item Weight: %s %s
+tooltip.eternallyoverburdened:splint.info=Used to stabilize and remove injuries
+tooltip.eternallyoverburdened:stack_weight.info=Total Weight: %s %s

@@ -1,0 +1,165 @@
+package com.invadermonky.eternallyoverburdened.utils.helpers;
+
+import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
+import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
+import com.invadermonky.eternallyoverburdened.config.ConfigTags;
+import com.invadermonky.eternallyoverburdened.utils.PlayerCarryStats;
+import com.invadermonky.eternallyoverburdened.utils.libs.ModIds;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+public class PlayerHelper {
+    /**
+     * A map to hold calculated player carrying weights. This map will hold the values so other functions
+     * can access the weight amounts without having to recalculate the value every time.
+     */
+    private static final Map<UUID, PlayerCarryStats> PLAYER_CARRY_STATS = new HashMap<>();
+
+    public static PlayerCarryStats getPlayerCarryStats(EntityPlayer player) {
+        if(!PLAYER_CARRY_STATS.containsKey(player.getUniqueID())) {
+            updatePlayerCarryStats(player);
+        }
+        return PLAYER_CARRY_STATS.get(player.getUniqueID());
+    }
+
+    public static void updatePlayerCarryStats(EntityPlayer player) {
+        if(!PLAYER_CARRY_STATS.containsKey(player.getUniqueID())) {
+            PLAYER_CARRY_STATS.put(player.getUniqueID(), new PlayerCarryStats(player));
+        } else {
+            PLAYER_CARRY_STATS.get(player.getUniqueID()).updateCarryStats(player);
+        }
+    }
+
+    public static double getMaxCarryWeight(EntityPlayer player) {
+        double carryWeight = ConfigHandlerEO.settings.maxCarryWeight;
+        for(ItemStack stack : player.getArmorInventoryList()) {
+            carryWeight += ConfigTags.getArmorAdjustment(stack);
+        }
+
+        if(ModIds.baubles.isLoaded) {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                carryWeight += ConfigTags.getArmorAdjustment(stack);
+            }
+        }
+        //TODO: Maybe gamestage support?
+
+        for(PotionEffect effect : player.getActivePotionEffects()) {
+            carryWeight += ConfigTags.getPotionAdjustment(effect);
+        }
+
+        return carryWeight;
+    }
+
+    public static double getCurrentCarryWeight(EntityPlayer player) {
+        double weight = 0;
+        if(player.isCreative()) {
+            return weight;
+        }
+        //Mouse Item weight
+        weight += ConfigTags.getItemStackWeight(player.inventory.getItemStack());
+        //Carry weight
+        for(int slot = 0; slot < player.inventory.getSizeInventory(); slot++) {
+            ItemStack slotStack = player.inventory.getStackInSlot(slot);
+            weight += ConfigTags.getItemStackWeight(slotStack);
+        }
+        //Baubles Weight
+        if(ModIds.baubles.isLoaded) {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+            for(int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                weight += ConfigTags.getItemStackWeight(stack);
+            }
+        }
+        return weight;
+    }
+
+    @Nullable
+    public static EntityPlayer getEntityPlayer(UUID playerId) {
+        return FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? null : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
+    }
+
+    @Nullable
+    public static RayTraceResult getClosestItemRayTrace(World world, EntityPlayer player, boolean useLiquids) {
+        double reach = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+        Vec3d origin = player.getPositionEyes(1.0f);
+        RayTraceResult result = rayTrace(world, player, useLiquids);
+        if(result != null) {
+            Vec3d endPoint = result.hitVec;
+            AxisAlignedBB searchVolume = new AxisAlignedBB(origin.x, origin.y, origin.z, endPoint.x, endPoint.y, endPoint.z);
+            List<EntityItem> entityItems = world.getEntitiesWithinAABB(EntityItem.class, searchVolume);
+
+            Entity closestHitEntity = null;
+            Vec3d closestHitPosition = endPoint;
+            AxisAlignedBB entityBounds;
+            Vec3d intercept = null;
+
+            for(EntityItem entityItem : entityItems) {
+                entityBounds = entityItem.getEntityBoundingBox();
+                if(entityBounds != null) {
+                    float entityBorderSize = entityItem.getCollisionBorderSize();
+                    if (entityBorderSize != 0) {
+                        entityBounds = entityBounds.grow(entityBorderSize, entityBorderSize, entityBorderSize);
+                    }
+
+                    RayTraceResult hit = entityBounds.calculateIntercept(origin, endPoint);
+                    if (hit != null) {
+                        intercept = hit.hitVec;
+                    }
+                }
+
+                if (intercept != null) {
+                    float currentHitDistance = (float) intercept.distanceTo(origin);
+                    float closestHitDistance = (float) closestHitPosition.distanceTo(origin);
+                    if (currentHitDistance < closestHitDistance) {
+                        closestHitEntity = entityItem;
+                        closestHitPosition = intercept;
+                    }
+                }
+            }
+            if (closestHitEntity != null) {
+                result = new RayTraceResult(closestHitEntity, closestHitPosition);
+                result.typeOfHit = RayTraceResult.Type.ENTITY;
+            }
+        }
+        return result;
+    }
+
+    public static RayTraceResult rayTrace(World world, EntityPlayer player, boolean useLiquids) {
+        float f = player.rotationPitch;
+        float f1 = player.rotationYaw;
+        double d0 = player.posX;
+        double d1 = player.posY + player.eyeHeight;
+        double d2 = player.posZ;
+        Vec3d vec3d = new Vec3d(d0, d1, d2);
+        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
+        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
+        float f4 = -MathHelper.cos(-f * 0.017453292F);
+        float f5 = MathHelper.sin(-f * 0.017453292F);
+        float f6 = f3 * f4;
+        float f7 = f2 * f4;
+        double d3 = 32.0;
+        Vec3d vec3d1 = vec3d.add((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+        return world.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
+    }
+
+
+}
