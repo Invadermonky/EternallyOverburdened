@@ -178,11 +178,14 @@ public class CommonEventHandler {
                     }
                     if(toAdd > 0) {
                         stack.shrink(toAdd);
-                        stats.updateCarryStats(player);
+                        stats.setCurrentCarryWeight(stats.getCurrentCarryWeight() + (itemWeight * toAdd));
                         NetworkHandler.INSTANCE.sendTo(new PacketUpdateClientCarryWeight(stats), (EntityPlayerMP) player);
                     }
                 }
                 isCanceled = true;
+            } else {
+                stats.setCurrentCarryWeight(stats.getCurrentCarryWeight() + stackWeight);
+                NetworkHandler.INSTANCE.sendTo(new PacketUpdateClientCarryWeight(stats), (EntityPlayerMP) player);
             }
             if(isCanceled) {
                 player.sendStatusMessage(StringHelper.getTranslatedComponent("pickup_failed", "chat"), true);
@@ -222,7 +225,7 @@ public class CommonEventHandler {
                     }
                     if(stack.isEmpty() || stack.getCount() < count) {
                         player.addStat(StatList.getObjectsPickedUpStats(item), count);
-                        PlayerHelper.updatePlayerCarryStats(player);
+                        stats.setCurrentCarryWeight(stats.getCurrentCarryWeight() + (stackWeight - (itemWeight * stack.getCount())));
                         NetworkHandler.INSTANCE.sendTo(new PacketUpdateClientCarryWeight(stats), (EntityPlayerMP) player);
                     }
                 }
@@ -246,7 +249,7 @@ public class CommonEventHandler {
                         if (toAdd > 0) {
                             stack.shrink(toAdd);
                             player.addStat(StatList.getObjectsPickedUpStats(item), count);
-                            PlayerHelper.updatePlayerCarryStats(player);
+                            stats.setCurrentCarryWeight(stats.getCurrentCarryWeight() + (itemWeight * toAdd));
                             NetworkHandler.INSTANCE.sendTo(new PacketUpdateClientCarryWeight(stats), (EntityPlayerMP) player);
                         }
                     }

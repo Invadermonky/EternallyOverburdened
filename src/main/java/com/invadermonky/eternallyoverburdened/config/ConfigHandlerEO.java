@@ -318,7 +318,9 @@ public class ConfigHandlerEO {
                         "  minecraft:iron_chestplate=-20",
                         "  quark:backpack=200",
                 })
-        public String[] equipmentAdjustments = new String[] {};
+        public String[] equipmentAdjustments = new String[] {
+                "quark:backpack=200"
+        };
 
         @Config.Name("Enchantment Adjustments")
         @Config.Comment
