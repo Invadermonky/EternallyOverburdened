@@ -305,7 +305,7 @@ public class ConfigHandlerEO {
                 "minecraft:yellow_flower=0.1"
         };
 
-        @Config.Name("Armor Adjustments")
+        @Config.Name("Equipment Adjustments")
         @Config.Comment
                 ({
                         "A list of carrying capacity increases or decreases that occur when players is wearing specific",
@@ -318,9 +318,7 @@ public class ConfigHandlerEO {
                         "  minecraft:iron_chestplate=-20",
                         "  quark:backpack=200",
                 })
-        public String[] armorAdjustments = new String[] {
-
-        };
+        public String[] equipmentAdjustments = new String[] {};
 
         @Config.Name("Enchantment Adjustments")
         @Config.Comment
@@ -335,9 +333,7 @@ public class ConfigHandlerEO {
                         "  minecraft:protection=-5",
                         "  minecraft:unbreaking=20"
                 })
-        public String[] enchantmentAdjustments = new String[] {
-
-        };
+        public String[] enchantmentAdjustments = new String[] {};
 
         @Config.Name("Potion Adjustments")
         @Config.Comment

@@ -120,7 +120,7 @@ public class WeightSettings {
         parseCapabilityBlacklist();
         parseItemWeights();
         parseFluidWeights();
-        parseArmorAdjustments();
+        parseEquipmentAdjustments();
         parseEnchantmentAdjustments();
         parsePotionAdjustments();
     }
@@ -177,10 +177,10 @@ public class WeightSettings {
         FLUID_WEIGHTS = new Object2DoubleOpenHashMap<>(map);
     }
 
-    private static void parseArmorAdjustments() {
+    private static void parseEquipmentAdjustments() {
         Map<ResourceLocation, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.itemSettings.armorAdjustments) {
+        for(String configStr : ConfigHandlerEO.itemSettings.equipmentAdjustments) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {

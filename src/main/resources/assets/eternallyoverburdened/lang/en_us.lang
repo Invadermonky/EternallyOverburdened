@@ -1,10 +1,10 @@
 # Config
-eternallyoverburdened.general.weights.armoradjustments=Armor Adjustments
-eternallyoverburdened.general.weights.capabilityblacklist=Capability Blacklist
-eternallyoverburdened.general.weights.enchantmentadjustments=Enchantment Adjustments
-eternallyoverburdened.general.weights.fluidweights=Fluid Weights
-eternallyoverburdened.general.weights.itemweights=Item Weights
-eternallyoverburdened.general.weights.potionAdjustments=Potion Adjustments
+eternallyoverburdened.general.item settings.equipmentadjustments=Equipment Adjustments
+eternallyoverburdened.general.item settings.capabilityblacklist=Capability Blacklist
+eternallyoverburdened.general.item settings.enchantmentadjustments=Enchantment Adjustments
+eternallyoverburdened.general.item settings.fluidweights=Fluid Weights
+eternallyoverburdened.general.item settings.itemweights=Item Weights
+eternallyoverburdened.general.item settings.potionAdjustments=Potion Adjustments
 
 # Chat
 chat.eternallyoverburdened:injured=You have injured yourself carrying too much weight.
