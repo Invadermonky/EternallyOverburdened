@@ -7,6 +7,7 @@ import com.invadermonky.eternallyoverburdened.utils.MoveDistanceHolder;
 import com.invadermonky.eternallyoverburdened.utils.helpers.StringHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -27,14 +28,15 @@ public class PotionOverburdened extends AbstractEOPotion {
         this.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, OVERBURDENED_UUID.toString(), -0.15, Constants.AttributeModifierOperation.MULTIPLY);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void performEffect(@NotNull EntityLivingBase entityLiving, int amplifier) {
         if(!entityLiving.world.isRemote) {
             MoveDistanceHolder holder = this.getDistanceHolder(entityLiving);
             if (amplifier >= 2) {
                 holder.updateDistanceMoved();
-                if (holder.getDistanceMoved() >= ConfigHandlerEO.potions.overburdened.movementInjuryDistance) {
-                    int chance = (amplifier - 1) * ConfigHandlerEO.potions.overburdened.movementInjuryChance;
+                if (holder.getDistanceMoved() >= ConfigHandlerEO.potionSettings.overburdened.movementInjuryDistance) {
+                    int chance = (amplifier - 1) * ConfigHandlerEO.potionSettings.overburdened.movementInjuryChance;
                     if (chance > 0 && entityLiving.world.rand.nextInt(100) < chance) {
                         String messageKey = entityLiving.isPotionActive(ModPotionsEO.INJURED) ? "injured_again" : "injured";
                         entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, 9600, 0, true, false));
@@ -49,6 +51,14 @@ public class PotionOverburdened extends AbstractEOPotion {
                 holder.resetDistanceMoved();
             }
         }
+        if(!entityLiving.onGround && entityLiving.isInWater()) {
+            entityLiving.addVelocity(0, -(0.01 + (amplifier * 0.007)), 0);
+        }
+    }
+
+    @Override
+    public double getAttributeModifierAmount(int amplifier, @NotNull AttributeModifier modifier) {
+        return amplifier < 4 ? super.getAttributeModifierAmount(amplifier, modifier) : -1.0;
     }
 
     @Override

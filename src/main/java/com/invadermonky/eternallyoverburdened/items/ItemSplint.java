@@ -10,12 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,6 +30,7 @@ public class ItemSplint extends Item {
         this.setMaxStackSize(1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World worldIn, EntityPlayer playerIn, @NotNull EnumHand handIn) {
         if(playerIn.isPotionActive(ModPotionsEO.INJURED)) {
@@ -41,6 +40,7 @@ public class ItemSplint extends Item {
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull ItemStack onItemUseFinish(@NotNull ItemStack stack, @NotNull World worldIn, @NotNull EntityLivingBase entityLiving) {
         if(entityLiving instanceof EntityPlayer && entityLiving.isPotionActive(ModPotionsEO.INJURED)) {

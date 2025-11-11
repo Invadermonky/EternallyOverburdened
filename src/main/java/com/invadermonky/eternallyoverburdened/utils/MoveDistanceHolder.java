@@ -20,10 +20,10 @@ public class MoveDistanceHolder {
 
     public void updateDistanceMoved() {
         double distance = 0;
-        if(entityLiving.isEntityAlive() && !entityLiving.isRiding()) {
-            double distX = entityLiving.posX - this.posX;
-            double distY = entityLiving.posY - this.posY;
-            double distZ = entityLiving.posZ - this.posZ;
+        if(this.canUpdateMoveDistance()) {
+            double distX = this.entityLiving.posX - this.posX;
+            double distY = this.entityLiving.posY - this.posY;
+            double distZ = this.entityLiving.posZ - this.posZ;
             distance = Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
             distance = distance <= 8.0 ? distance : 0;
         }
@@ -36,10 +36,17 @@ public class MoveDistanceHolder {
         this.distMoved = 0;
     }
 
+    private boolean canUpdateMoveDistance() {
+        return this.entityLiving.isEntityAlive()
+                && this.entityLiving.onGround
+                && !this.entityLiving.isRiding()
+                && !this.entityLiving.isElytraFlying();
+    }
+
     private void updateCurrentPosition() {
-        this.posX = entityLiving.posX;
-        this.posY = entityLiving.posY;
-        this.posZ = entityLiving.posZ;
+        this.posX = this.entityLiving.posX;
+        this.posY = this.entityLiving.posY;
+        this.posZ = this.entityLiving.posZ;
     }
 
 }

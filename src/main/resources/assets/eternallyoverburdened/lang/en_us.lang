@@ -10,17 +10,24 @@ eternallyoverburdened.general.weights.potionAdjustments=Potion Adjustments
 chat.eternallyoverburdened:injured=You have injured yourself carrying too much weight.
 chat.eternallyoverburdened:injured_again=You have further injured yourself carrying too much weight.
 chat.eternallyoverburdened:injured_increased=You have further exacerbated your injury.
-chat.eternallyoverburdened:pickup_failed=You are overburdened. Interact with the item to pick it up.
+chat.eternallyoverburdened:overburdened_pickup_failed=You cannot carry any more.
+chat.eternallyoverburdened:pickup_failed=You are overburdened. Interact to pick up the item.
 
 # Enchantments
 enchantment.eternallyoverburdened:pack_mule=Pack Mule
+enchantment.eternallyoverburdened.pack_mule.desc=Increases maximum carry weight.
 
 # Items
 item.eternallyoverburdened:splint.name=Splint
 
 # Potions
 eternallyoverburdened:injured=§cInjured
+description.eternallyoverburdened:injured=Reduces movement speed and restricts jumping.
 eternallyoverburdened:overburdened=§cOverburdened
+description.eternallyoverburdened:overburdened=Reduces movement speed and increases fall damage.
+potion.potency.3=IV
+potion.potency.4=V
+potion.potency.5=VI
 
 # Tooltips
 tooltip.eternallyoverburdened:carry_weight_adjustment.info=%s%s %s Carry Weight

@@ -3,7 +3,6 @@ package com.invadermonky.eternallyoverburdened.potions;
 import com.invadermonky.eternallyoverburdened.EternallyOverburdened;
 import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
 import com.invadermonky.eternallyoverburdened.registry.ModItemsEO;
-import com.invadermonky.eternallyoverburdened.registry.ModPotionsEO;
 import com.invadermonky.eternallyoverburdened.utils.MoveDistanceHolder;
 import com.invadermonky.eternallyoverburdened.utils.helpers.StringHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,8 +32,8 @@ public class PotionInjured extends AbstractEOPotion {
         if(!entityLiving.world.isRemote) {
             MoveDistanceHolder holder = this.getDistanceHolder(entityLiving);
             holder.updateDistanceMoved();
-            if (holder.getDistanceMoved() >= ConfigHandlerEO.potions.injured.injuryDamageDistance) {
-                int chance = ConfigHandlerEO.potions.injured.injuryDamageChance;
+            if (holder.getDistanceMoved() >= ConfigHandlerEO.potionSettings.injured.injuryDamageDistance) {
+                int chance = ConfigHandlerEO.potionSettings.injured.injuryDamageChance;
                 if (chance > 0 && entityLiving.world.rand.nextInt(100) < chance) {
                     entityLiving.attackEntityFrom(DamageSource.GENERIC, 1.0f);
                     PotionEffect effect = entityLiving.getActivePotionEffect(this);
@@ -55,6 +54,7 @@ public class PotionInjured extends AbstractEOPotion {
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull List<ItemStack> getCurativeItems() {
         return Collections.singletonList(new ItemStack(ModItemsEO.SPLINT));

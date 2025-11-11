@@ -23,7 +23,7 @@ public class EnchantmentPackMule extends Enchantment {
 
     @Override
     public int getMinEnchantability(int enchantmentLevel) {
-        return 1 + enchantmentLevel * ConfigHandlerEO.enchantments.packMule.minEnchantability;
+        return 1 + enchantmentLevel * ConfigHandlerEO.enchantmentSettings.packMule.minEnchantability;
     }
 
     @Override

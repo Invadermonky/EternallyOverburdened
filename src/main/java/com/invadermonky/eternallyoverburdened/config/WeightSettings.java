@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConfigTags {
+public class WeightSettings {
     private static final Set<ResourceLocation> CAPABILITY_BLACKLIST = new HashSet<>();
     private static Object2DoubleMap<ResourceLocation> ITEM_WEIGHTS;
     private static Object2DoubleMap<Fluid> FLUID_WEIGHTS;
@@ -38,21 +38,27 @@ public class ConfigTags {
 
     public static double getItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            return ITEM_WEIGHTS.getOrDefault(stack.getItem().getRegistryName(), ConfigHandlerEO.weights.defaultItemWeight);
+            return ITEM_WEIGHTS.getOrDefault(stack.getItem().getRegistryName(), ConfigHandlerEO.itemSettings.defaultItemWeight);
+        }
+        return 0;
+    }
+
+    public static double getSingleItemWeight(ItemStack stack) {
+        if(!stack.isEmpty()) {
+            return getItemWeight(stack) + getFluidHandlerCapabilityWeight(stack) + getItemHandlerCapabilityWeight(stack);
         }
         return 0;
     }
 
     public static double getItemStackWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            double weight = getItemWeight(stack) + getItemHandlerCapabilityWeight(stack) + getFluidHandlerCapabilityWeight(stack);
-            return weight * stack.getCount();
+            return getSingleItemWeight(stack) * stack.getCount();
         }
         return 0;
     }
 
     public static double getFluidWeight(@Nullable Fluid fluid) {
-        return fluid != null ? FLUID_WEIGHTS.getOrDefault(fluid, ConfigHandlerEO.weights.defaultFluidWeight) : 0;
+        return fluid != null ? FLUID_WEIGHTS.getOrDefault(fluid, ConfigHandlerEO.itemSettings.defaultFluidWeight) : 0;
     }
 
     public static double getFluidStackWeight(@Nullable FluidStack fluidStack) {
@@ -121,7 +127,7 @@ public class ConfigTags {
 
     private static void parseCapabilityBlacklist() {
         CAPABILITY_BLACKLIST.clear();
-        for(String str : ConfigHandlerEO.weights.capabilityBlacklist) {
+        for(String str : ConfigHandlerEO.itemSettings.capabilityBlacklist) {
             CAPABILITY_BLACKLIST.add(new ResourceLocation(str));
         }
     }
@@ -129,7 +135,7 @@ public class ConfigTags {
     private static void parseItemWeights() {
         Map<ResourceLocation, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.weights.itemWeights) {
+        for(String configStr : ConfigHandlerEO.itemSettings.itemWeights) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
@@ -149,7 +155,7 @@ public class ConfigTags {
     private static void parseFluidWeights() {
         Map<Fluid, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.weights.fluidWeights) {
+        for(String configStr : ConfigHandlerEO.itemSettings.fluidWeights) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
@@ -174,7 +180,7 @@ public class ConfigTags {
     private static void parseArmorAdjustments() {
         Map<ResourceLocation, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.weights.armorAdjustments) {
+        for(String configStr : ConfigHandlerEO.itemSettings.armorAdjustments) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
@@ -194,7 +200,7 @@ public class ConfigTags {
     private static void parseEnchantmentAdjustments() {
         Map<Enchantment, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.weights.enchantmentAdjustments) {
+        for(String configStr : ConfigHandlerEO.itemSettings.enchantmentAdjustments) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
@@ -213,8 +219,8 @@ public class ConfigTags {
                 LogHelper.error("Failed to parse config string: " + configStr);
             }
         }
-        if(ConfigHandlerEO.enchantments.packMule.enablePackMule) {
-            map.put(ModEnchantsEO.PACK_MULE, ConfigHandlerEO.enchantments.packMule.carryWeightBonus);
+        if(ConfigHandlerEO.enchantmentSettings.packMule.enablePackMule) {
+            map.put(ModEnchantsEO.PACK_MULE, ConfigHandlerEO.enchantmentSettings.packMule.carryWeightBonus);
         }
         ENCHANTMENT_ADJUSTMENTS = new Object2DoubleOpenHashMap<>(map);
     }
@@ -222,7 +228,7 @@ public class ConfigTags {
     private static void parsePotionAdjustments() {
         Map<Potion, Double> map = new HashMap<>();
         Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
-        for(String configStr : ConfigHandlerEO.weights.potionAdjustments) {
+        for(String configStr : ConfigHandlerEO.itemSettings.potionAdjustments) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {

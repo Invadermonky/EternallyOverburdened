@@ -2,11 +2,12 @@ package com.invadermonky.eternallyoverburdened.handlers;
 
 import com.invadermonky.eternallyoverburdened.EternallyOverburdened;
 import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
-import com.invadermonky.eternallyoverburdened.config.ConfigTags;
+import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.registry.ModPotionsEO;
 import com.invadermonky.eternallyoverburdened.utils.PlayerCarryStats;
 import com.invadermonky.eternallyoverburdened.utils.helpers.PlayerHelper;
 import com.invadermonky.eternallyoverburdened.utils.helpers.StringHelper;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
@@ -43,19 +44,19 @@ public class ClientEventHandler {
         if(player != null) {
             ItemStack stack = event.getItemStack();
             List<String> tooltip = event.getToolTip();
-            String units = ConfigHandlerEO.settings.weightUnits;
-            double carryWeightAdjustment = ConfigTags.getArmorAdjustment(stack) + ConfigTags.getEnchantmentAdjustments(stack);
+            String units = ConfigHandlerEO.clientSettings.weightUnits;
+            double carryWeightAdjustment = WeightSettings.getArmorAdjustment(stack);
             if(carryWeightAdjustment != 0) {
                 tooltip.add(StringHelper.getTranslatedString("equipped", "tooltip", "desc"));
                 String sign = carryWeightAdjustment > 0 ? "+" : "";
                 tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment), units));
             }
-            double stackWeight = ConfigTags.getItemStackWeight(stack);
+            double stackWeight = WeightSettings.getItemStackWeight(stack);
             tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), DECIMAL_FORMAT.format(stackWeight), units));
             if (GuiScreen.isShiftKeyDown()) {
-                double itemWeight = ConfigTags.getItemWeight(stack);
-                double inventoryWeight = ConfigTags.getItemHandlerCapabilityWeight(stack);
-                double fluidWeight = ConfigTags.getFluidHandlerCapabilityWeight(stack);
+                double itemWeight = WeightSettings.getItemWeight(stack);
+                double inventoryWeight = WeightSettings.getItemHandlerCapabilityWeight(stack);
+                double fluidWeight = WeightSettings.getFluidHandlerCapabilityWeight(stack);
 
                 tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("item_weight", "tooltip", "info"), DECIMAL_FORMAT.format(itemWeight), units));
                 if(inventoryWeight > 0) {
@@ -68,6 +69,7 @@ public class ClientEventHandler {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @SubscribeEvent
     public static void onFovUpdate(FOVUpdateEvent event) {
         EntityPlayer player = event.getEntity();
@@ -78,6 +80,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void onRenderOverlayPost(RenderGameOverlayEvent.Post event) {
+        //TODO: Maybe add an icon that includes negative and positive adjustment effects to the bar.
+
         Minecraft mc = Minecraft.getMinecraft();
         ScaledResolution scaledResolution = new ScaledResolution(mc);
         EntityPlayerSP playerSP = mc.player;
@@ -93,7 +97,8 @@ public class ClientEventHandler {
 
     private static void renderCarryWeightBar(Minecraft minecraft, ScaledResolution scaledResolution, EntityPlayer player) {
         PlayerCarryStats stats = PlayerHelper.getPlayerCarryStats(player);
-        boolean reversed = ConfigHandlerEO.settings.overlayReverseDirection;
+        boolean reversed = ConfigHandlerEO.clientSettings.overlayReverseDirection;
+        boolean isInWater = !player.isCreative() && player.isInsideOfMaterial(Material.WATER) && ConfigHandlerEO.clientSettings.offsetInWater;
         int height = scaledResolution.getScaledHeight();
         int width = scaledResolution.getScaledWidth();
         long ticks = minecraft.ingameGUI.getUpdateCounter();
@@ -103,8 +108,11 @@ public class ClientEventHandler {
         GlStateManager.enableBlend();
 
         for(int i = 0; i < 10; i++) {
-            int x = width / 2 - ConfigHandlerEO.settings.overlayXOffset + (reversed ? (-i * 8 + 82) : (i * 8 + 10));
-            int y = height - 49 - ConfigHandlerEO.settings.overlayYOffset;
+            int x = width / 2 + (reversed ? (-i * 8 + 72 + ConfigHandlerEO.clientSettings.overlayXOffset) : (i * 8 + ConfigHandlerEO.clientSettings.overlayXOffset));
+            int y = height + ConfigHandlerEO.clientSettings.overlayYOffset;
+            if(isInWater) {
+                y -= 10;
+            }
             if(stats.isOverburdened()) {
                 PotionEffect effect = player.getActivePotionEffect(ModPotionsEO.OVERBURDENED);
                 if(effect != null) {
@@ -123,14 +131,14 @@ public class ClientEventHandler {
 
     private static WidgetSprite getOverburdenedBarSprite(PlayerCarryStats stats, int currentIndex, boolean reverse) {
         double currentWeight = stats.getCurrentCarryWeight();
-        double maxWeight = stats.getMaxCarryWeight();
+        double maxWeight = stats.getMaxCarryWeight(false);
         if(stats.isOverburdened()) {
             double overWeight = currentWeight - maxWeight;
-            double maxOverWeight = ConfigHandlerEO.potions.overburdened.overburdenedThreshold * 4;
+            double maxOverWeight = ConfigHandlerEO.potionSettings.overburdened.overburdenedThreshold * 4;
             int overWeightLevel = (int) Math.ceil(overWeight / maxOverWeight * 10.0);
             return currentIndex <= overWeightLevel ? WidgetSprite.BAG_OVER : WidgetSprite.BAG_FULL;
         } else {
-            int weightLevel = (int) (currentWeight / maxWeight * 20.0);
+            int weightLevel = (int) (Math.ceil(currentWeight / maxWeight * 20.0));
             int fullIndex = weightLevel / 2 - 1;
             int halfIndex = weightLevel % 2 == 1 ? fullIndex + 1 : -1;
             if (currentIndex <= fullIndex) {

@@ -3,7 +3,7 @@ package com.invadermonky.eternallyoverburdened.utils.helpers;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
-import com.invadermonky.eternallyoverburdened.config.ConfigTags;
+import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.utils.PlayerCarryStats;
 import com.invadermonky.eternallyoverburdened.utils.libs.ModIds;
 import net.minecraft.entity.Entity;
@@ -48,22 +48,22 @@ public class PlayerHelper {
     }
 
     public static double getMaxCarryWeight(EntityPlayer player) {
-        double carryWeight = ConfigHandlerEO.settings.maxCarryWeight;
+        double carryWeight = ConfigHandlerEO.generalSettings.maxCarryWeight;
         for(ItemStack stack : player.getArmorInventoryList()) {
-            carryWeight += ConfigTags.getArmorAdjustment(stack);
+            carryWeight += WeightSettings.getArmorAdjustment(stack);
         }
 
         if(ModIds.baubles.isLoaded) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);
-                carryWeight += ConfigTags.getArmorAdjustment(stack);
+                carryWeight += WeightSettings.getArmorAdjustment(stack);
             }
         }
         //TODO: Maybe gamestage support?
 
         for(PotionEffect effect : player.getActivePotionEffects()) {
-            carryWeight += ConfigTags.getPotionAdjustment(effect);
+            carryWeight += WeightSettings.getPotionAdjustment(effect);
         }
 
         return carryWeight;
@@ -75,18 +75,18 @@ public class PlayerHelper {
             return weight;
         }
         //Mouse Item weight
-        weight += ConfigTags.getItemStackWeight(player.inventory.getItemStack());
+        weight += WeightSettings.getItemStackWeight(player.inventory.getItemStack());
         //Carry weight
         for(int slot = 0; slot < player.inventory.getSizeInventory(); slot++) {
             ItemStack slotStack = player.inventory.getStackInSlot(slot);
-            weight += ConfigTags.getItemStackWeight(slotStack);
+            weight += WeightSettings.getItemStackWeight(slotStack);
         }
         //Baubles Weight
         if(ModIds.baubles.isLoaded) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
             for(int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);
-                weight += ConfigTags.getItemStackWeight(stack);
+                weight += WeightSettings.getItemStackWeight(stack);
             }
         }
         return weight;
@@ -98,10 +98,11 @@ public class PlayerHelper {
     }
 
     @Nullable
-    public static RayTraceResult getClosestItemRayTrace(World world, EntityPlayer player, boolean useLiquids) {
+    public static RayTraceResult getClosestItemRayTrace(EntityPlayer player, boolean useLiquids) {
+        World world = player.world;
         double reach = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
         Vec3d origin = player.getPositionEyes(1.0f);
-        RayTraceResult result = rayTrace(world, player, useLiquids);
+        RayTraceResult result = rayTrace(world, player, reach, useLiquids);
         if(result != null) {
             Vec3d endPoint = result.hitVec;
             AxisAlignedBB searchVolume = new AxisAlignedBB(origin.x, origin.y, origin.z, endPoint.x, endPoint.y, endPoint.z);
@@ -143,21 +144,20 @@ public class PlayerHelper {
         return result;
     }
 
-    public static RayTraceResult rayTrace(World world, EntityPlayer player, boolean useLiquids) {
-        float f = player.rotationPitch;
-        float f1 = player.rotationYaw;
-        double d0 = player.posX;
-        double d1 = player.posY + player.eyeHeight;
-        double d2 = player.posZ;
-        Vec3d vec3d = new Vec3d(d0, d1, d2);
-        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
-        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
-        float f4 = -MathHelper.cos(-f * 0.017453292F);
-        float f5 = MathHelper.sin(-f * 0.017453292F);
+    public static RayTraceResult rayTrace(World world, EntityPlayer player, double reach, boolean useLiquids) {
+        float pitch = player.rotationPitch;
+        float yaw = player.rotationYaw;
+        double posX = player.posX;
+        double posY = player.posY + player.eyeHeight;
+        double posZ = player.posZ;
+        Vec3d vec3d = new Vec3d(posX, posY, posZ);
+        float f2 = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
+        float f3 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+        float f4 = -MathHelper.cos(-pitch * 0.017453292F);
+        float f5 = MathHelper.sin(-pitch * 0.017453292F);
         float f6 = f3 * f4;
         float f7 = f2 * f4;
-        double d3 = 32.0;
-        Vec3d vec3d1 = vec3d.add((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+        Vec3d vec3d1 = vec3d.add((double)f6 * reach, (double)f5 * reach, (double)f7 * reach);
         return world.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
     }
 

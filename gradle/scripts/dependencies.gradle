@@ -36,13 +36,6 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:24.1.0'
 
     implementation 'mezz:jei:4.27.3'
-
-    implementation "CraftTweaker2:CraftTweaker2-API:4.1.20.695"
-    implementation "CraftTweaker2:ZenScript:4.1.20.695"
-    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.695"
-    implementation("com.cleanroommc:groovyscript:1.2.2") { transitive = false }
-    implementation rfg.deobf("curse.maven:the-one-probe-245211:2667280")
-
     implementation rfg.deobf('curse.maven:baubles-227083:2518667')
 
     // Example - Dependency descriptor:
