@@ -3,7 +3,6 @@ package com.invadermonky.eternallyoverburdened;
 import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.network.NetworkHandler;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 

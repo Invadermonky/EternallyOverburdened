@@ -365,7 +365,7 @@ public class ConfigHandlerEO {
             @Config.RangeInt(min = 0, max = 100)
             @Config.Name("Min Enchantability")
             @Config.Comment("The minimum enchantability of the Pack Mule enchant. ")
-            public int minEnchantability = 10;
+            public int minEnchantability = 8;
 
             @Config.RangeDouble(min = 0, max = 100000)
             @Config.Name("Carry Weight Bonus")
