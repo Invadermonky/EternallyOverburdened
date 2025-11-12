@@ -17,8 +17,8 @@ public class ConfigHandlerEO {
     public static EnchantmentCategory enchantmentSettings = new EnchantmentCategory();
     @Config.Name("Potion Settings")
     public static PotionEffectsCategory potionSettings = new PotionEffectsCategory();
-    @Config.Name("General Settings")
-    public static GeneralSettingsCategory generalSettings = new GeneralSettingsCategory();
+    @Config.Name("Player Settings")
+    public static PlayerSettingsCategory playerSettings = new PlayerSettingsCategory();
 
     public static class ClientSettingsCategory {
         @Config.Name("Overlay X Offset")
@@ -42,7 +42,7 @@ public class ConfigHandlerEO {
         public String weightUnits = "MU";
     }
 
-    public static class GeneralSettingsCategory {
+    public static class PlayerSettingsCategory {
         @Config.RangeDouble(min = 1.0, max = 1000000.0)
         @Config.Name("Max Carry Weight")
         @Config.Comment("The maximum amount of weight a player can carry before being overburdened.")
@@ -81,8 +81,7 @@ public class ConfigHandlerEO {
         @Config.Name("Fluid Weights")
         @Config.Comment
                 ({
-                        "A list of fluids and their respective weights. Weights are per 1mb and can be positive or negative.",
-                        "Negative fluid weights will decrease the weight of other items in the player's inventory.",
+                        "A list of fluids and their respective weights. Weights are per 1mb and can be positive or negative. Negative fluid weights will decrease the weight of other items in the player's inventory.",
                         " Format:",
                         "  fluidname=weight",
                         " Examples:",
@@ -95,7 +94,7 @@ public class ConfigHandlerEO {
         @Config.Comment
                 ({
                         "A list of items and their respective weights.",
-                        " Format - modId:itemId=weight",
+                        " Format: modId:itemId=weight",
                         "  modId:itemId - the item registry name",
                         "  weight - the weight of this item",
                         " Examples:",
@@ -308,9 +307,8 @@ public class ConfigHandlerEO {
         @Config.Name("Equipment Adjustments")
         @Config.Comment
                 ({
-                        "A list of carrying capacity increases or decreases that occur when players is wearing specific",
-                        "armors or baubles. These value can be positive or negative.",
-                        " Format - modId:itemId=adjustment",
+                        "A list of carrying capacity increases or decreases that occur when players is wearing specific armors or baubles. These value can be positive or negative.",
+                        " Format: modId:itemId=adjustment",
                         "  modId:itemId - the item registry name",
                         "  adjustment - the carrying capacity weight adjustment, can be positive or negative or decimal values",
                         " Examples:",
@@ -325,10 +323,8 @@ public class ConfigHandlerEO {
         @Config.Name("Enchantment Adjustments")
         @Config.Comment
                 ({
-                        "A list of carrying capacity increases or decreases that occur when players are wearing equipment",
-                        "enchanted with these effects. These value can be positive or negative. The enchantment level will",
-                        "be multiplied by the adjustment value.",
-                        " Format - enchantment=adjustment",
+                        "A list of carrying capacity increases or decreases that occur when players are wearing equipment enchanted with these effects. These value can be positive or negative. The enchantment level will be multiplied by the adjustment value.",
+                        " Format: enchantment=adjustment",
                         "  enchantment - the enchantment registry name",
                         "  adjustment - the carrying capacity weight adjustment, can be positive or negative or decimal values",
                         " Examples:",
@@ -343,7 +339,7 @@ public class ConfigHandlerEO {
                         "A list of carrying capacity increases or decreases that occur when players are afflicted with",
                         "potion effects. These value can be positive or negative. The potion level will be multiplied by",
                         "the adjustment value.",
-                        " Format - potionId=adjustment",
+                        " Format: potionId=adjustment",
                         "  potionId - the potion registry name",
                         "  adjustment - the carrying capacity weight adjustment, can be positive or negative or decimal values",
                         " Examples:",
@@ -391,11 +387,15 @@ public class ConfigHandlerEO {
             @Config.Comment("The chance the player will be damage while moving ")
             public int injuryDamageChance = 5;
 
-
             @Config.RangeInt(min = 0, max = 1000)
             @Config.Name("Injury Hurt Distance")
             @Config.Comment("The distance a player needs to move before the injury damage check occurs.")
             public int injuryDamageDistance = 80;
+
+            @Config.RangeInt(min = 1, max = 10000)
+            @Config.Name("Injury Duration")
+            @Config.Comment("The duration, in seconds, that an injury will last.")
+            public int injuryDuration = 480;
         }
 
         public static class OverburdenedCategory {

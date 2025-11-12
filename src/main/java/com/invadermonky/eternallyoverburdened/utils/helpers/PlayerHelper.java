@@ -48,7 +48,7 @@ public class PlayerHelper {
     }
 
     public static double getMaxCarryWeight(EntityPlayer player) {
-        double carryWeight = ConfigHandlerEO.generalSettings.maxCarryWeight;
+        double carryWeight = ConfigHandlerEO.playerSettings.maxCarryWeight;
         for(ItemStack stack : player.getArmorInventoryList()) {
             carryWeight += WeightSettings.getArmorAdjustment(stack);
         }

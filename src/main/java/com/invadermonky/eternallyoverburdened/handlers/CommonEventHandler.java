@@ -39,7 +39,7 @@ public class CommonEventHandler {
         if(event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (!player.world.isRemote) {
-                if (player.ticksExisted % ConfigHandlerEO.generalSettings.updateInterval == 0) {
+                if (player.ticksExisted % ConfigHandlerEO.playerSettings.updateInterval == 0) {
                     PlayerHelper.updatePlayerCarryStats(player);
                     PlayerCarryStats stats = PlayerHelper.getPlayerCarryStats(player);
                     NetworkHandler.INSTANCE.sendTo(new PacketUpdateClientCarryWeight(stats), (EntityPlayerMP) player);
@@ -77,7 +77,7 @@ public class CommonEventHandler {
             EntityLivingBase entityLiving = event.getEntityLiving();
             float damage = event.getAmount();
             if(entityLiving.isPotionActive(ModPotionsEO.INJURED) && damage >= 2.0f) {
-                entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, 9600, 0, true, false));
+                entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, ConfigHandlerEO.potionSettings.injured.injuryDuration, 0, true, false));
                 if(entityLiving instanceof EntityPlayer) {
                     ((EntityPlayer) entityLiving).sendStatusMessage(StringHelper.getTranslatedComponent("injured_again", "chat"), true);
                 }
@@ -89,7 +89,7 @@ public class CommonEventHandler {
                         injuryChance += (int) ((damage - 1.0f) * 5);
                     }
                     if (entityLiving.world.rand.nextInt(100) < injuryChance) {
-                        entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, 9600, 0, true, false));
+                        entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, ConfigHandlerEO.potionSettings.injured.injuryDuration, 0, true, false));
                         if(entityLiving instanceof EntityPlayer) {
                             ((EntityPlayer) entityLiving).sendStatusMessage(StringHelper.getTranslatedComponent("injured", "chat"), true);
                         }
