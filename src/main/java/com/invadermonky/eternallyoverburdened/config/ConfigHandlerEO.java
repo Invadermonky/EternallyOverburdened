@@ -68,8 +68,7 @@ public class ConfigHandlerEO {
         @Config.Name("Capability Blacklist")
         @Config.Comment
                 ({
-                        "A blacklist of items that should not calculate values of any internal storage. An example of",
-                        "this would be inventory or fluid container items.",
+                        "A blacklist of items that should not calculate values of any internal storage. An example of this would be inventory or fluid container items.",
                         "Format:",
                         "  modid:itemid",
                         "Examples:",
@@ -94,12 +93,15 @@ public class ConfigHandlerEO {
         @Config.Comment
                 ({
                         "A list of items and their respective weights.",
-                        " Format: modId:itemId=weight",
+                        " Format: modId:itemId:meta=weight",
                         "  modId:itemId - the item registry name",
+                        "  meta - [optional] the item metadata, leaving this value blank will match all items with this registry name",
                         "  weight - the weight of this item",
                         " Examples:",
+                        "  minecraft:stone=2",
+                        "  minecraft:stone:1=2",
                         "  minecraft:stick=0.2",
-                        "  minecraft:feather=0.1"
+                        "  minecraft:feather=0.01"
                 })
         public String[] itemWeights = new String[] {
                 "baubles:ring=0.1",
@@ -163,7 +165,7 @@ public class ConfigHandlerEO {
                 "minecraft:ender_eye=0.3",
                 "minecraft:ender_pearl=0.2",
                 "minecraft:experience_bottle=0.3",
-                "minecraft:feather=0.1",
+                "minecraft:feather=0.01",
                 "minecraft:fermented_spider_eye=0.2",
                 "minecraft:filled_map=0.2",
                 "minecraft:fire_charge=0.2",
@@ -308,13 +310,15 @@ public class ConfigHandlerEO {
         @Config.Comment
                 ({
                         "A list of carrying capacity increases or decreases that occur when players is wearing specific armors or baubles. These value can be positive or negative.",
-                        " Format: modId:itemId=adjustment",
+                        " Format: modId:itemId:meta=adjustment",
                         "  modId:itemId - the item registry name",
+                        "  meta - [optional] the item metadata, leaving this value blank will match all items with this registry name",
                         "  adjustment - the carrying capacity weight adjustment, can be positive or negative or decimal values",
                         " Examples:",
                         "  minecraft:leather_chestplate=20",
                         "  minecraft:iron_chestplate=-20",
                         "  quark:backpack=200",
+                        "  baubles:ring:0=10"
                 })
         public String[] equipmentAdjustments = new String[] {
                 "quark:backpack=200"

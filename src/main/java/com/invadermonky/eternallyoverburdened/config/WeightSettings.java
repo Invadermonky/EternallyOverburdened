@@ -1,6 +1,7 @@
 package com.invadermonky.eternallyoverburdened.config;
 
 import com.invadermonky.eternallyoverburdened.registry.ModEnchantsEO;
+import com.invadermonky.eternallyoverburdened.utils.ItemHolder;
 import com.invadermonky.eternallyoverburdened.utils.helpers.LogHelper;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
@@ -30,15 +31,20 @@ import java.util.regex.Pattern;
 
 public class WeightSettings {
     private static final Set<ResourceLocation> CAPABILITY_BLACKLIST = new HashSet<>();
-    private static Object2DoubleMap<ResourceLocation> ITEM_WEIGHTS;
+    private static Object2DoubleMap<ItemHolder> ITEM_WEIGHTS;
     private static Object2DoubleMap<Fluid> FLUID_WEIGHTS;
-    private static Object2DoubleMap<ResourceLocation> ARMOR_ADJUSTMENTS;
+    private static Object2DoubleMap<ItemHolder> ARMOR_ADJUSTMENTS;
     private static Object2DoubleMap<Enchantment> ENCHANTMENT_ADJUSTMENTS;
     private static Object2DoubleMap<Potion> POTION_ADJUSTMENTS;
 
     public static double getItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            return ITEM_WEIGHTS.getOrDefault(stack.getItem().getRegistryName(), ConfigHandlerEO.itemSettings.defaultItemWeight);
+            ItemHolder stackHolder = new ItemHolder(stack);
+            if(ITEM_WEIGHTS.containsKey(stackHolder) || ITEM_WEIGHTS.containsKey(stackHolder.setMetaData(ItemHolder.WILDCARD_VALUE))) {
+                return ITEM_WEIGHTS.get(stackHolder);
+            } else {
+                return ConfigHandlerEO.itemSettings.defaultItemWeight;
+            }
         }
         return 0;
     }
@@ -93,8 +99,14 @@ public class WeightSettings {
     }
 
     public static double getArmorAdjustment(ItemStack stack) {
-        double adjustment = ARMOR_ADJUSTMENTS.getOrDefault(stack.getItem().getRegistryName(), 0.0);
-        adjustment += getEnchantmentAdjustments(stack);
+        double adjustment = 0;
+        if(!stack.isEmpty()) {
+            ItemHolder stackHolder = new ItemHolder(stack);
+            if(ARMOR_ADJUSTMENTS.containsKey(stackHolder) || ARMOR_ADJUSTMENTS.containsKey(stackHolder.setMetaData(ItemHolder.WILDCARD_VALUE))) {
+                adjustment += ARMOR_ADJUSTMENTS.get(stackHolder);
+            }
+            adjustment += getEnchantmentAdjustments(stack);
+        }
         return adjustment;
     }
 
@@ -133,15 +145,20 @@ public class WeightSettings {
     }
 
     private static void parseItemWeights() {
-        Map<ResourceLocation, Double> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
+        Map<ItemHolder, Double> map = new HashMap<>();
+        Pattern pattern = Pattern.compile("^(.+?:.+?):?(-?\\d*)=(-?\\d*\\.?\\d*)$");
         for(String configStr : ConfigHandlerEO.itemSettings.itemWeights) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
                     ResourceLocation loc = new ResourceLocation(matcher.group(1));
-                    double weight = Double.parseDouble(matcher.group(2));
-                    map.put(loc, weight);
+                    double weight = Double.parseDouble(matcher.group(3));
+                    if(!matcher.group(2).isEmpty()) {
+                        int meta = Integer.parseInt(matcher.group(2));
+                        map.put(new ItemHolder(loc, meta), weight);
+                    } else {
+                        map.put(new ItemHolder(loc), weight);
+                    }
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -178,15 +195,20 @@ public class WeightSettings {
     }
 
     private static void parseEquipmentAdjustments() {
-        Map<ResourceLocation, Double> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("^(.+?:.+?)=(-?\\d*\\.?\\d*)$");
+        Map<ItemHolder, Double> map = new HashMap<>();
+        Pattern pattern = Pattern.compile("^(.+?:.+?):?(-?\\d*)=(-?\\d*\\.?\\d*)$");
         for(String configStr : ConfigHandlerEO.itemSettings.equipmentAdjustments) {
             try {
                 Matcher matcher = pattern.matcher(configStr);
                 if (matcher.find()) {
                     ResourceLocation loc = new ResourceLocation(matcher.group(1));
-                    double weight = Double.parseDouble(matcher.group(2));
-                    map.put(loc, weight);
+                    double weight = Double.parseDouble(matcher.group(3));
+                    if(!matcher.group(2).isEmpty()) {
+                        int meta = Integer.parseInt(matcher.group(2));
+                        map.put(new ItemHolder(loc, meta), weight);
+                    } else {
+                        map.put(new ItemHolder(loc), weight);
+                    }
                 } else {
                     throw new IllegalArgumentException();
                 }
