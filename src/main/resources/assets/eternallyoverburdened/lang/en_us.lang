@@ -28,9 +28,11 @@ description.eternallyoverburdened:overburdened=Reduces movement and increases fa
 
 # Tooltips
 tooltip.eternallyoverburdened:carry_weight_adjustment.info=%s%s %s Carry Weight
+tooltip.eternallyoverburdened:carry_weight_adjustment_a1.info=%s%s Body Positivity
 tooltip.eternallyoverburdened:equipped.desc=When Equipped:
 tooltip.eternallyoverburdened:fluid_weight.info=Fluid Weight: %s %s
 tooltip.eternallyoverburdened:inventory_weight.info=Inventory Weight: %s %s
 tooltip.eternallyoverburdened:item_weight.info=Item Weight: %s %s
 tooltip.eternallyoverburdened:splint.info=Used to stabilize and remove injuries
 tooltip.eternallyoverburdened:stack_weight.info=Total Weight: %s %s
+tooltip.eternallyoverburdened:units_a1=Body Positivity

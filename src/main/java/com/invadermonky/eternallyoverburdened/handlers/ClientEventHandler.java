@@ -5,6 +5,7 @@ import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
 import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.registry.ModPotionsEO;
 import com.invadermonky.eternallyoverburdened.utils.PlayerCarryStats;
+import com.invadermonky.eternallyoverburdened.utils.helpers.DateHelper;
 import com.invadermonky.eternallyoverburdened.utils.helpers.PlayerHelper;
 import com.invadermonky.eternallyoverburdened.utils.helpers.StringHelper;
 import net.minecraft.block.material.Material;
@@ -49,7 +50,11 @@ public class ClientEventHandler {
             if(carryWeightAdjustment != 0) {
                 tooltip.add(StringHelper.getTranslatedString("equipped", "tooltip", "desc"));
                 String sign = carryWeightAdjustment > 0 ? "+" : "";
-                tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment), units));
+                if(DateHelper.isAprilFools()) {
+                    tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment_a1", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment)));
+                } else {
+                    tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment), units));
+                }
             }
             double stackWeight = WeightSettings.getItemStackWeight(stack);
             tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), DECIMAL_FORMAT.format(stackWeight), units));
