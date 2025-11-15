@@ -35,4 +35,3 @@ tooltip.eternallyoverburdened:inventory_weight.info=Inventory Weight: %s %s
 tooltip.eternallyoverburdened:item_weight.info=Item Weight: %s %s
 tooltip.eternallyoverburdened:splint.info=Used to stabilize and remove injuries
 tooltip.eternallyoverburdened:stack_weight.info=Total Weight: %s %s
-tooltip.eternallyoverburdened:units_a1=Body Positivity
