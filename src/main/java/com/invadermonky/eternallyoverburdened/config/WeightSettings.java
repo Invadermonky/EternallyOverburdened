@@ -5,16 +5,22 @@ import com.invadermonky.eternallyoverburdened.utils.ItemHolder;
 import com.invadermonky.eternallyoverburdened.utils.helpers.LogHelper;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -85,6 +91,24 @@ public class WeightSettings {
         return weight;
     }
 
+    public static double getTileItemHandlerCapabilityWeight(World world, ItemStack stack) {
+        double weight = 0;
+        if(CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()))
+            return weight;
+
+        TileEntity tile = getStackTileEntity(world, stack);
+        if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            if(handler != null) {
+                for(int i = 0; i < handler.getSlots(); i++) {
+                    ItemStack slotStack = handler.getStackInSlot(i);
+                    //weight += getItemStackWeight(world, slotStack);
+                }
+            }
+        }
+        return weight;
+    }
+
     public static double getFluidHandlerCapabilityWeight(ItemStack stack) {
         double weight = 0;
         if(!CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()) && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
@@ -96,6 +120,40 @@ public class WeightSettings {
             }
         }
         return weight;
+    }
+
+    public static double getTileFluidHandlerCapabilityWeight(World world, ItemStack stack) {
+        double weight = 0;
+        if(CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()))
+            return weight;
+
+        TileEntity tile = getStackTileEntity(world, stack);
+        if(tile != null && tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+            IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+            if(handler != null) {
+                for(IFluidTankProperties props : handler.getTankProperties()) {
+                    weight += getFluidStackWeight(props.getContents());
+                }
+            }
+        }
+        return weight;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nullable
+    private static TileEntity getStackTileEntity(World world, ItemStack stack) {
+        if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("BlockEntityTag")) {
+            Block block = Block.getBlockFromItem(stack.getItem());
+            IBlockState state = block.getStateFromMeta(stack.getMetadata());
+            if (block != Blocks.AIR && block.hasTileEntity(state)) {
+                TileEntity tile = block.createTileEntity(world, state);
+                if(tile != null) {
+                    tile.readFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
+                    return tile;
+                }
+            }
+        }
+        return null;
     }
 
     public static double getArmorAdjustment(ItemStack stack) {
