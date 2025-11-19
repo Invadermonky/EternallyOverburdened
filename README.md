@@ -8,6 +8,8 @@ Have you ever wanted to torture your modpack players by adding a system that cha
 
 Eternally Overburdened adds a highly configurable carry weight system to Minecraft that features fully customizable item weights and an overburdened system with scaling penalties and injuries.
 
+---
+
 ## 🎒 Carry Weight
 
 ![](https://github.com/Invadermonky/EternallyOverburdened/blob/master/images/encubrance_bar_example.png?raw=true "encumbrance bar")
@@ -35,6 +37,8 @@ Injuries have a chance of occurring when excessive fall damage is taken while ov
 While injured, players will be afflicted with reduced movement speed, reduced jump height, and increased fall damage. If an injury is left untreated, moving around has a chance to exacerbate the injury, increasing the duration by a small amount.
 
 Injuries can be treated and removed by crafting and using a Splint.
+
+---
 
 ## 📜 Credit and Notes
 This mod was made as an entry to the November 2025 1.12 Coalition Mod Jam.
