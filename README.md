@@ -1,10 +1,6 @@
-<div style="text-align: center;">
-
 ![](https://github.com/Invadermonky/EternallyOverburdened/blob/master/images/title.png?raw=true "title bar")
 
-</div>
-
-Have you ever wanted to torture your modpack players by adding a system that changes that innocuous stack of features into the literal straw that broke the camel's back? If yes, than this mod is for you!
+Have you ever wanted to torture your modpack players by adding a system that changes that innocuous stack of feathers into the literal straw that broke the camel's back? If yes, than this mod is for you!
 
 Eternally Overburdened adds a highly configurable carry weight system to Minecraft that features fully customizable item weights and an overburdened system with scaling penalties and injuries.
 
