@@ -86,7 +86,7 @@ public class CommonEventHandler {
                 if (effect != null) {
                     int injuryChance = ConfigHandlerEO.potionSettings.overburdened.fallInjuryChance * (1 + effect.getAmplifier());
                     if (damage >= 2.0f) {
-                        injuryChance += (int) ((damage - 1.0f) * 5);
+                        injuryChance += (int) ((damage - 2.0f) * 5);
                     }
                     if (entityLiving.world.rand.nextInt(100) < injuryChance) {
                         entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, ConfigHandlerEO.potionSettings.injured.injuryDuration, 0, true, false));
