@@ -10,9 +10,6 @@
 ### Changed
 - Configuration item weights now support ore dictionary strings
 
-### Fixed
-
-
 ---
 
 ## 1.12.2-1.0.0
