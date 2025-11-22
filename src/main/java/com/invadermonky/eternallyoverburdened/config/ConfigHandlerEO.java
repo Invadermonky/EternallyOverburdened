@@ -93,11 +93,14 @@ public class ConfigHandlerEO {
         @Config.Comment
                 ({
                         "A list of items and their respective weights.",
-                        " Format: modId:itemId:meta=weight",
-                        "  modId:itemId - the item registry name",
-                        "  meta - [optional] the item metadata, leaving this value blank will match all items with this registry name",
-                        "  weight - the weight of this item",
+                        " Format: ",
+                        "  oreDict=weight",
+                        "  modId:itemId:meta=weight",
+                        "    modId:itemId - the item registry name",
+                        "    meta - [optional] the item metadata, leaving this value blank will match all items with this registry name",
+                        "    weight - the weight of this item",
                         " Examples:",
+                        "  ingotIron=0.4",
                         "  minecraft:stone=2",
                         "  minecraft:stone:1=2",
                         "  minecraft:stick=0.2",

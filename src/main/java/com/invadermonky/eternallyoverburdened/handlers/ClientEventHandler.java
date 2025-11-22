@@ -1,6 +1,8 @@
 package com.invadermonky.eternallyoverburdened.handlers;
 
 import com.invadermonky.eternallyoverburdened.EternallyOverburdened;
+import com.invadermonky.eternallyoverburdened.api.custom.ICustomCapabilityHandler;
+import com.invadermonky.eternallyoverburdened.api.custom.ICustomItemWeight;
 import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
 import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.registry.ModPotionsEO;
@@ -30,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -45,7 +48,6 @@ public class ClientEventHandler {
         if(player != null) {
             ItemStack stack = event.getItemStack();
             List<String> tooltip = event.getToolTip();
-            String units = ConfigHandlerEO.clientSettings.weightUnits;
             double carryWeightAdjustment = WeightSettings.getArmorAdjustment(stack, true);
             if(carryWeightAdjustment != 0) {
                 tooltip.add(StringHelper.getTranslatedString("equipped", "tooltip", "desc"));
@@ -53,22 +55,31 @@ public class ClientEventHandler {
                 if(DateHelper.isAprilFools()) {
                     tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment_a1", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment)));
                 } else {
-                    tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment", "tooltip", "info"), sign, DECIMAL_FORMAT.format(carryWeightAdjustment), units));
+                    tooltip.add(" " + TextFormatting.BLUE + I18n.format(StringHelper.getTranslationKey("carry_weight_adjustment", "tooltip", "info"), sign, StringHelper.getFormattedWeight(carryWeightAdjustment)));
                 }
             }
             double stackWeight = WeightSettings.getItemStackWeight(stack);
-            tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), DECIMAL_FORMAT.format(stackWeight), units));
+            tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), StringHelper.getFormattedWeight(stackWeight)));
             if (GuiScreen.isShiftKeyDown()) {
+                ICustomItemWeight customWeight = WeightSettings.getCustomItemWeight(stack);
+                ICustomCapabilityHandler customHandler = WeightSettings.getCustomCapabilityHandler(stack);
                 double itemWeight = WeightSettings.getItemWeight(stack);
-                double inventoryWeight = WeightSettings.getItemHandlerCapabilityWeight(stack);
-                double fluidWeight = WeightSettings.getFluidHandlerCapabilityWeight(stack);
+                double inventoryWeight = WeightSettings.getItemHandlerCapabilityWeight(stack, customHandler);
+                double fluidWeight = WeightSettings.getFluidHandlerCapabilityWeight(stack, customHandler);
 
-                tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("item_weight", "tooltip", "info"), DECIMAL_FORMAT.format(itemWeight), units));
+                tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("item_weight", "tooltip", "info"), StringHelper.getFormattedWeight(itemWeight)));
                 if(inventoryWeight > 0) {
-                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("inventory_weight", "tooltip", "info"), DECIMAL_FORMAT.format(inventoryWeight), units));
+                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("inventory_weight", "tooltip", "info"), StringHelper.getFormattedWeight(inventoryWeight)));
                 }
                 if(fluidWeight > 0) {
-                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("fluid_weight", "tooltip", "info"), DECIMAL_FORMAT.format(fluidWeight), units));
+                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("fluid_weight", "tooltip", "info"), StringHelper.getFormattedWeight(fluidWeight)));
+                }
+                if(customWeight != null) {
+                    List<String> extraWeights = new ArrayList<>();
+                    customWeight.getCustomTooltipWeights(stack, extraWeights);
+                    for(String extraWeight : extraWeights) {
+                        tooltip.add(" ┠> " + extraWeight);
+                    }
                 }
             }
         }

@@ -11,7 +11,7 @@ import java.util.List;
  * This interface should be used for ItemStacks that store tile entity data such as
  * Shulker Boxes or Fluid Tanks.
  * <p>
- * For an example of this interface in use, see {@link ShulkerBoxCustomWeight}.
+ * For an example of this interface in use, see {@link ShulkerBoxCapabilityHandler}.
  */
 public interface ICustomCapabilityHandler {
     /**

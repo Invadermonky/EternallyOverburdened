@@ -1,7 +1,9 @@
 package com.invadermonky.eternallyoverburdened.api.custom;
 
-import com.invadermonky.eternallyoverburdened.config.WeightSettings;
+import com.invadermonky.eternallyoverburdened.api.OverburdenedAPI;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ import java.util.List;
  * <p>
  * This class should only be used if {@link ICustomCapabilityHandler} is not capable of handling
  * the weight logic.
+ * <p>
+ * For an example of this interface in use, see {@link SpawnEggItemWeight}.
  */
 public interface ICustomItemWeight {
     /**
@@ -23,7 +27,7 @@ public interface ICustomItemWeight {
      * using ItemStack tag data.
      */
     default double getItemWeight(ItemStack stack) {
-        return WeightSettings.getDefaultItemWeight(stack);
+        return OverburdenedAPI.getItemWeight(stack);
     }
 
     /**
@@ -45,8 +49,9 @@ public interface ICustomItemWeight {
      * holding shift.
      *
      * @param stack The ItemStack being queried for the tooltip
-     * @param additionalWeights A list containing any additional weight sources that will
-     *                                 be added to the detailed weight tooltip
+     * @param extraWeights A list of translated and formatted strings containing any additional
+     *                     weight sources that will be added to the detailed weight tooltip
      */
-    default void getCustomTooltipWeights(ItemStack stack, List<String> additionalWeights) {}
+    @SideOnly(Side.CLIENT)
+    default void getCustomTooltipWeights(ItemStack stack, List<String> extraWeights) {}
 }

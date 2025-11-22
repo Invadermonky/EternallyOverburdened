@@ -1,13 +1,18 @@
 package com.invadermonky.eternallyoverburdened.utils.helpers;
 
 import com.invadermonky.eternallyoverburdened.EternallyOverburdened;
+import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
+import java.text.DecimalFormat;
+
 public class StringHelper {
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0#");
+
     public static String getTranslationKey(String unloc, String type, String... params) {
         StringBuilder str = new StringBuilder(type + "." + EternallyOverburdened.MOD_ID + ":" + unloc);
         for (String param : params) {
@@ -42,5 +47,9 @@ public class StringHelper {
             name += " " + dimensionId;
         }
         return name;
+    }
+
+    public static String getFormattedWeight(double weight) {
+        return DECIMAL_FORMAT.format(weight) + " " + ConfigHandlerEO.clientSettings.weightUnits;
     }
 }

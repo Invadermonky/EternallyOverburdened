@@ -1,47 +1,48 @@
 package com.invadermonky.eternallyoverburdened.config;
 
+import com.invadermonky.eternallyoverburdened.api.custom.ICustomCapabilityHandler;
+import com.invadermonky.eternallyoverburdened.api.custom.ICustomItemWeight;
 import com.invadermonky.eternallyoverburdened.registry.ModEnchantsEO;
 import com.invadermonky.eternallyoverburdened.utils.ItemHolder;
 import com.invadermonky.eternallyoverburdened.utils.helpers.LogHelper;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WeightSettings {
     private static final Set<ResourceLocation> CAPABILITY_BLACKLIST = new HashSet<>();
+    private static final Set<ICustomItemWeight> CUSTOM_ITEM_WEIGHTS = new HashSet<>();
+    private static final Set<ICustomCapabilityHandler> CUSTOM_CAPABILITY_HANDLERS = new HashSet<>();
     private static Object2DoubleMap<ItemHolder> ITEM_WEIGHTS;
     private static Object2DoubleMap<Fluid> FLUID_WEIGHTS;
     private static Object2DoubleMap<ItemHolder> ARMOR_ADJUSTMENTS;
     private static Object2DoubleMap<Enchantment> ENCHANTMENT_ADJUSTMENTS;
     private static Object2DoubleMap<Potion> POTION_ADJUSTMENTS;
+
+    //##################################################
+    //  Default Item Weights (No custom handling)
+    //##################################################
 
     public static double getDefaultItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
@@ -55,31 +56,60 @@ public class WeightSettings {
         return 0;
     }
 
+    public static double getDefaultSingleItemWeight(ItemStack stack) {
+        double weight = 0;
+        ICustomCapabilityHandler customHandler = getCustomCapabilityHandler(stack);
+        weight += getItemWeight(stack);
+        weight += getFluidHandlerCapabilityWeight(stack, customHandler);
+        weight += getItemHandlerCapabilityWeight(stack, customHandler);
+        return weight;
+    }
+
+    public static double getDefaultItemStackWeight(ItemStack stack) {
+        return getDefaultSingleItemWeight(stack) * stack.getCount();
+    }
+
+    //##################################################
+    //  Item Weights (Includes custom handling)
+    //##################################################
+
     public static double getItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            ItemHolder stackHolder = new ItemHolder(stack);
-            if(ITEM_WEIGHTS.containsKey(stackHolder) || ITEM_WEIGHTS.containsKey(stackHolder.setMetaData(ItemHolder.WILDCARD_VALUE))) {
-                return ITEM_WEIGHTS.get(stackHolder);
-            } else {
-                return ConfigHandlerEO.itemSettings.defaultItemWeight;
+            ICustomItemWeight customWeight = getCustomItemWeight(stack);
+            if(customWeight != null) {
+                return customWeight.getItemWeight(stack);
             }
         }
-        return 0;
+        return getDefaultItemWeight(stack);
     }
 
     public static double getSingleItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            return getItemWeight(stack) + getFluidHandlerCapabilityWeight(stack) + getItemHandlerCapabilityWeight(stack);
+            ICustomItemWeight customWeight = getCustomItemWeight(stack);
+            if(customWeight != null) {
+                return customWeight.getSingleItemWeight(stack);
+            } else {
+                return getDefaultSingleItemWeight(stack);
+            }
         }
         return 0;
     }
 
     public static double getItemStackWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
-            return getSingleItemWeight(stack) * stack.getCount();
+            ICustomItemWeight customWeight = getCustomItemWeight(stack);
+            if(customWeight != null) {
+                return customWeight.getItemStackWeight(stack);
+            } else {
+                return getSingleItemWeight(stack) * stack.getCount();
+            }
         }
         return 0;
     }
+
+    //##################################################
+    //  Fluid Weights
+    //##################################################
 
     public static double getFluidWeight(@Nullable Fluid fluid) {
         return fluid != null ? FLUID_WEIGHTS.getOrDefault(fluid, ConfigHandlerEO.itemSettings.defaultFluidWeight) : 0;
@@ -89,84 +119,76 @@ public class WeightSettings {
         return fluidStack != null ? getFluidWeight(fluidStack.getFluid()) * fluidStack.amount : 0;
     }
 
-    public static double getItemHandlerCapabilityWeight(ItemStack stack) {
+    //##################################################
+    //  Capability Weights
+    //##################################################
+
+    public static double getItemHandlerCapabilityWeight(ItemStack stack, @Nullable ICustomCapabilityHandler customHandler) {
         double weight = 0;
-        if(!CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()) && stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            if(handler != null) {
-                for(int i = 0; i < handler.getSlots(); i++) {
-                    ItemStack slotStack = handler.getStackInSlot(i);
-                    weight += getItemStackWeight(slotStack);
+        if(!CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName())) {
+            if(customHandler != null) {
+                NonNullList<ItemStack> contents = customHandler.getContainedItems(stack);
+                for(ItemStack invStack : contents) {
+                    weight += getItemStackWeight(invStack);
+                }
+            } else if (stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+                IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                if (handler != null) {
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        ItemStack slotStack = handler.getStackInSlot(i);
+                        weight += getItemStackWeight(slotStack);
+                    }
                 }
             }
         }
         return weight;
     }
 
-    public static double getTileItemHandlerCapabilityWeight(World world, ItemStack stack) {
+    public static double getFluidHandlerCapabilityWeight(ItemStack stack, @Nullable ICustomCapabilityHandler customHandler) {
         double weight = 0;
-        if(CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()))
-            return weight;
-
-        TileEntity tile = getStackTileEntity(world, stack);
-        if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            if(handler != null) {
-                for(int i = 0; i < handler.getSlots(); i++) {
-                    ItemStack slotStack = handler.getStackInSlot(i);
-                    //weight += getItemStackWeight(world, slotStack);
+        if(!CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName())) {
+            if(customHandler != null) {
+                List<FluidStack> fluidStacks = customHandler.getContainedFluids(stack);
+                for(FluidStack fluidStack : fluidStacks) {
+                    weight += getFluidStackWeight(fluidStack);
+                }
+            } else if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                if (handler != null) {
+                    for (IFluidTankProperties props : handler.getTankProperties()) {
+                        weight += getFluidStackWeight(props.getContents());
+                    }
                 }
             }
         }
         return weight;
     }
 
-    public static double getFluidHandlerCapabilityWeight(ItemStack stack) {
-        double weight = 0;
-        if(!CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()) && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-            IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-            if(handler != null) {
-                for(IFluidTankProperties props : handler.getTankProperties()) {
-                    weight += getFluidStackWeight(props.getContents());
-                }
-            }
-        }
-        return weight;
-    }
+    //##################################################
+    //  Custom Handlers
+    //##################################################
 
-    public static double getTileFluidHandlerCapabilityWeight(World world, ItemStack stack) {
-        double weight = 0;
-        if(CAPABILITY_BLACKLIST.contains(stack.getItem().getRegistryName()))
-            return weight;
-
-        TileEntity tile = getStackTileEntity(world, stack);
-        if(tile != null && tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-            IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-            if(handler != null) {
-                for(IFluidTankProperties props : handler.getTankProperties()) {
-                    weight += getFluidStackWeight(props.getContents());
-                }
-            }
-        }
-        return weight;
-    }
-
-    @SuppressWarnings("deprecation")
     @Nullable
-    private static TileEntity getStackTileEntity(World world, ItemStack stack) {
-        if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("BlockEntityTag")) {
-            Block block = Block.getBlockFromItem(stack.getItem());
-            IBlockState state = block.getStateFromMeta(stack.getMetadata());
-            if (block != Blocks.AIR && block.hasTileEntity(state)) {
-                TileEntity tile = block.createTileEntity(world, state);
-                if(tile != null) {
-                    tile.readFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
-                    return tile;
-                }
-            }
-        }
-        return null;
+    public static ICustomItemWeight getCustomItemWeight(ItemStack stack) {
+        return CUSTOM_ITEM_WEIGHTS.stream().filter(customWeight -> customWeight.matches(stack)).findFirst().orElse(null);
     }
+
+    public static void registerCustomItemWeight(ICustomItemWeight customWeight) {
+        CUSTOM_ITEM_WEIGHTS.add(customWeight);
+    }
+
+    @Nullable
+    public static ICustomCapabilityHandler getCustomCapabilityHandler(ItemStack stack) {
+        return CUSTOM_CAPABILITY_HANDLERS.stream().filter(customHandler -> customHandler.matches(stack)).findFirst().orElse(null);
+    }
+
+    public static void registerCustomCapabilityHandler(ICustomCapabilityHandler customHandler) {
+        CUSTOM_CAPABILITY_HANDLERS.add(customHandler);
+    }
+
+    //##################################################
+    //  Carry Weight Adjustments
+    //##################################################
 
     public static double getArmorAdjustment(ItemStack stack, boolean includeEnchants) {
         double adjustment = 0;
@@ -208,6 +230,10 @@ public class WeightSettings {
         return POTION_ADJUSTMENTS.getOrDefault(potion, 0.0);
     }
 
+    //##################################################
+    //  Configuration Handling
+    //##################################################
+
     public static void syncConfig() {
         parseCapabilityBlacklist();
         parseItemWeights();
@@ -226,22 +252,36 @@ public class WeightSettings {
 
     private static void parseItemWeights() {
         Map<ItemHolder, Double> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("^(.+?:.+?):?(-?\\d*)=(-?\\d*\\.?\\d*)$");
+        Pattern configPattern = Pattern.compile("^([^=]+?)=(-?\\d*\\.?\\d*)$");
+        Pattern itemPattern = Pattern.compile("^(.+?:.+?):?(-?\\d*)$");
+        Pattern orePattern = Pattern.compile("^(\\w+)$");
         for(String configStr : ConfigHandlerEO.itemSettings.itemWeights) {
             try {
-                Matcher matcher = pattern.matcher(configStr);
-                if (matcher.find()) {
-                    ResourceLocation loc = new ResourceLocation(matcher.group(1));
-                    double weight = Double.parseDouble(matcher.group(3));
-                    if(!matcher.group(2).isEmpty()) {
-                        int meta = Integer.parseInt(matcher.group(2));
-                        map.put(new ItemHolder(loc, meta), weight);
+                Matcher configMatcher = configPattern.matcher(configStr);
+                if (configMatcher.find()) {
+                    double weight = Double.parseDouble(configMatcher.group(2));
+                    Matcher matcher = itemPattern.matcher(configMatcher.group(1));
+                    if(matcher.find()) {
+                        ResourceLocation loc = new ResourceLocation(matcher.group(1));
+                        if(!matcher.group(2).isEmpty()) {
+                            int meta = Integer.parseInt(matcher.group(2));
+                            map.put(new ItemHolder(loc, meta), weight);
+                        } else {
+                            map.put(new ItemHolder(loc), weight);
+                        }
+                        continue;
                     } else {
-                        map.put(new ItemHolder(loc), weight);
+                        matcher = orePattern.matcher(configMatcher.group(1));
+                        if(matcher.find()) {
+                            String oreDict = matcher.group(1);
+                            for(ItemStack stack : OreDictionary.getOres(oreDict)) {
+                                map.put(new ItemHolder(stack.getItem().getRegistryName(), stack.getMetadata()), weight);
+                            }
+                            continue;
+                        }
                     }
-                } else {
-                    throw new IllegalArgumentException();
                 }
+                throw new IllegalArgumentException();
             } catch (Exception e) {
                 LogHelper.error("Failed to parse config string: " + configStr);
             }
