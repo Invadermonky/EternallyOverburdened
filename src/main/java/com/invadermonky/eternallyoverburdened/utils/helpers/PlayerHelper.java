@@ -50,14 +50,14 @@ public class PlayerHelper {
     public static double getMaxCarryWeight(EntityPlayer player) {
         double carryWeight = ConfigHandlerEO.playerSettings.maxCarryWeight;
         for(ItemStack stack : player.getArmorInventoryList()) {
-            carryWeight += WeightSettings.getArmorAdjustment(stack);
+            carryWeight += WeightSettings.getArmorAdjustment(stack, true);
         }
 
         if(ModIds.baubles.isLoaded) {
             IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);
-                carryWeight += WeightSettings.getArmorAdjustment(stack);
+                carryWeight += WeightSettings.getArmorAdjustment(stack, true);
             }
         }
         //TODO: Maybe gamestage support?

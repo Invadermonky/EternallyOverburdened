@@ -46,7 +46,7 @@ public class ClientEventHandler {
             ItemStack stack = event.getItemStack();
             List<String> tooltip = event.getToolTip();
             String units = ConfigHandlerEO.clientSettings.weightUnits;
-            double carryWeightAdjustment = WeightSettings.getArmorAdjustment(stack);
+            double carryWeightAdjustment = WeightSettings.getArmorAdjustment(stack, true);
             if(carryWeightAdjustment != 0) {
                 tooltip.add(StringHelper.getTranslatedString("equipped", "tooltip", "desc"));
                 String sign = carryWeightAdjustment > 0 ? "+" : "";

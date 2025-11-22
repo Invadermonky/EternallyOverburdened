@@ -43,6 +43,18 @@ public class WeightSettings {
     private static Object2DoubleMap<Enchantment> ENCHANTMENT_ADJUSTMENTS;
     private static Object2DoubleMap<Potion> POTION_ADJUSTMENTS;
 
+    public static double getDefaultItemWeight(ItemStack stack) {
+        if(!stack.isEmpty()) {
+            ItemHolder stackHolder = new ItemHolder(stack);
+            if(ITEM_WEIGHTS.containsKey(stackHolder) || ITEM_WEIGHTS.containsKey(stackHolder.setMetaData(ItemHolder.WILDCARD_VALUE))) {
+                return ITEM_WEIGHTS.get(stackHolder);
+            } else {
+                return ConfigHandlerEO.itemSettings.defaultItemWeight;
+            }
+        }
+        return 0;
+    }
+
     public static double getItemWeight(ItemStack stack) {
         if(!stack.isEmpty()) {
             ItemHolder stackHolder = new ItemHolder(stack);
@@ -156,14 +168,16 @@ public class WeightSettings {
         return null;
     }
 
-    public static double getArmorAdjustment(ItemStack stack) {
+    public static double getArmorAdjustment(ItemStack stack, boolean includeEnchants) {
         double adjustment = 0;
         if(!stack.isEmpty()) {
             ItemHolder stackHolder = new ItemHolder(stack);
             if(ARMOR_ADJUSTMENTS.containsKey(stackHolder) || ARMOR_ADJUSTMENTS.containsKey(stackHolder.setMetaData(ItemHolder.WILDCARD_VALUE))) {
                 adjustment += ARMOR_ADJUSTMENTS.get(stackHolder);
             }
-            adjustment += getEnchantmentAdjustments(stack);
+            if(includeEnchants) {
+                adjustment += getEnchantmentAdjustments(stack);
+            }
         }
         return adjustment;
     }
@@ -179,11 +193,19 @@ public class WeightSettings {
     }
 
     public static double getEnchantmentAdjustment(Enchantment enchantment, int level) {
-        return ENCHANTMENT_ADJUSTMENTS.getOrDefault(enchantment, 0.0) * (double) level;
+        return getEnchantmentAdjustment(enchantment) * (double) level;
+    }
+
+    public static double getEnchantmentAdjustment(Enchantment enchantment) {
+        return ENCHANTMENT_ADJUSTMENTS.getOrDefault(enchantment, 0.0);
     }
 
     public static double getPotionAdjustment(PotionEffect effect) {
-        return POTION_ADJUSTMENTS.getOrDefault(effect.getPotion(), 0.0) * (double) effect.getAmplifier();
+        return getPotionAdjustment(effect.getPotion()) * (double) effect.getAmplifier();
+    }
+
+    public static double getPotionAdjustment(Potion potion) {
+        return POTION_ADJUSTMENTS.getOrDefault(potion, 0.0);
     }
 
     public static void syncConfig() {
