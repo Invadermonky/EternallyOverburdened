@@ -35,3 +35,8 @@ tooltip.eternallyoverburdened:inventory_weight.info=Inventory Weight: %s
 tooltip.eternallyoverburdened:item_weight.info=Item Weight: %s
 tooltip.eternallyoverburdened:splint.info=Used to stabilize and remove injuries
 tooltip.eternallyoverburdened:stack_weight.info=Total Weight: %s
+
+# GroovyScript
+groovyscript.wiki.eternallyoverburdened.weights.title=Item Weights
+groovyscript.wiki.eternallyoverburdened.weights.description=Allows the creation of custom IIngredient item weights. Always try to use the mod configuration for item weights whenever possible. Only use this when absolutely necessary.
+groovyscript.wiki.eternallyoverburdened.weights.setWeight=Adds an item weight in the format `item`, `weight`
