@@ -6,6 +6,9 @@
 - Added new API method for adding custom item weights
 - Added new API method for adding custom capability handling
 - Added support for Shulker Box inventory weight
+- Added support for Actually Additions Traveler's Sack inventory weight
+- Added support for Immersive Engineering barrel and crate inventory weight
+- Added support for Travelers Backpack backpack inventory weight
 
 ### Changed
 - Configuration item weights now support ore dictionary strings

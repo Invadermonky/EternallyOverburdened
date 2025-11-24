@@ -1,7 +1,6 @@
 package com.invadermonky.eternallyoverburdened;
 
-import com.invadermonky.eternallyoverburdened.api.OverburdenedAPI;
-import com.invadermonky.eternallyoverburdened.api.custom.ShulkerBoxCapabilityHandler;
+import com.invadermonky.eternallyoverburdened.compat.InitCompat;
 import com.invadermonky.eternallyoverburdened.config.WeightSettings;
 import com.invadermonky.eternallyoverburdened.network.NetworkHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -29,12 +28,8 @@ public class EternallyOverburdened {
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        OverburdenedAPI.registerCustomCapabilityHandler(new ShulkerBoxCapabilityHandler());
-    }
-
-    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        InitCompat.registerCustomHandlers();
         WeightSettings.syncConfig();
     }
 }

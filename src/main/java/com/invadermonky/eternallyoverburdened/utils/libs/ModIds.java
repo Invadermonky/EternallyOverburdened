@@ -4,7 +4,11 @@ import com.invadermonky.eternallyoverburdened.utils.helpers.ModHelper;
 import org.jetbrains.annotations.Nullable;
 
 public enum ModIds {
-    baubles(ConstIds.baubles);
+    actually_additions(ConstIds.actually_additions),
+    baubles(ConstIds.baubles),
+    immersive_engineering(ConstIds.immersive_engineering),
+    travelers_backpack(ConstIds.travelers_backpack)
+    ;
 
     public final String modId;
     public final String version;
@@ -32,6 +36,9 @@ public enum ModIds {
     }
 
     public static class ConstIds {
+        public static final String actually_additions = "actuallyadditions";
         public static final String baubles = "baubles";
+        public static final String immersive_engineering = "immersiveengineering";
+        public static final String travelers_backpack = "travelersbackpack";
     }
 }
