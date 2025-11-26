@@ -1,5 +1,5 @@
 # Attributes
-attribute.name.overburdened:carryWeight=Carry Weight
+attribute.name.overburdened:carry_weight=Carry Weight
 
 # Commands
 command.overburdened:carry_weight.add=Base Carry Weight increased to: %s

@@ -16,7 +16,7 @@ import java.util.UUID;
 public class AttributeHandlerEO {
     public static final UUID CARRY_WEIGHT_UUID = UUID.fromString("6d8a8016-8d36-475c-b8c9-8239e83fce7b");
     public static final IAttribute CARRY_WEIGHT = new RangedAttribute(null,
-            EternallyOverburdened.MOD_ID + ":carryWeight",
+            EternallyOverburdened.MOD_ID + ":carry_weight",
             ConfigHandlerEO.playerSettings.maxCarryWeight, 0, Double.MAX_VALUE)
             .setDescription("Carry Weight")
             .setShouldWatch(true);
