@@ -36,6 +36,13 @@ Injuries can be treated and removed by crafting and using a Splint.
 
 ---
 
+## ✨ New Features
+### Version 1.1.0+
+- Player Carry Weight is now an attribute value `overburdened:carry_weight`
+- Added command to dynamically modify player carry weight `/overburdened <target> <get|set|add|mult|reset> <value>`
+
+---
+
 ## 📜 Credit and Notes
 This mod was made as an entry to the November 2025 1.12 Coalition Mod Jam.
 - New Overburdened potion icon courtesy of [Foreck1](https://www.curseforge.com/members/foreck1/projects)
