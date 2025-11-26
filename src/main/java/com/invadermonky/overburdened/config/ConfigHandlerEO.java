@@ -402,7 +402,7 @@ public class ConfigHandlerEO {
             @Config.RangeInt(min = 1, max = 10000)
             @Config.Name("Injury Duration")
             @Config.Comment("The duration, in seconds, that an injury will last.")
-            public int injuryDuration = 480;
+            public int injuryDuration = 4800;
         }
 
         public static class OverburdenedCategory {
