@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "overburdened:splint"
+  },
+  "pattern": [
+    "ST",
+    "ST"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "string"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  }
+}

@@ -9,10 +9,15 @@
 - Added support for Actually Additions Traveler's Sack inventory weight
 - Added support for Immersive Engineering barrel and crate inventory weight
 - Added support for Travelers Backpack backpack inventory weight
+- Added command allowing dynamic modification of player carry weight
 
 ### Changed
 - Configuration item weights now support ore dictionary strings
+- Carry weight can now be accessed and modified with an IAttribute value
+- Refactored mod id due to previous id exceeding forges 20 character limit
 
+### Fixed
+- Fixed a number of issues caused by the mod id exceeding forge's 20 character limit
 
 ---
 

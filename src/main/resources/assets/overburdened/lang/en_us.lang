@@ -1,0 +1,56 @@
+# Attributes
+attribute.name.overburdened:carryWeight=Carry Weight
+
+# Commands
+command.overburdened:carry_weight.add=Base Carry Weight increased to: %s
+command.overburdened:carry_weight.get=Current Base Carry Weight: %s
+command.overburdened:carry_weight.mult=Base Carry Weight set to: %s
+command.overburdened:carry_weight.reset=Base Carry Weight reset to: %s
+command.overburdened:carry_weight.set=Base Carry Weight set to: %s
+command.overburdened:fatal=A fatal error has occurred. Carry Weight Attribute has not been initialized for player %s
+command.overburdened:invalid=Invalid command usage. For syntax, type /help overburdened
+command.overburdened:unknown_action=Unknown action: %s
+command.overburdened:usage=Usage: /overburdened <target> <get|set|add|mult|reset> <value>
+
+# Config
+overburdened.general.item settings.equipmentadjustments=Equipment Adjustments
+overburdened.general.item settings.capabilityblacklist=Capability Blacklist
+overburdened.general.item settings.enchantmentadjustments=Enchantment Adjustments
+overburdened.general.item settings.fluidweights=Fluid Weights
+overburdened.general.item settings.itemweights=Item Weights
+overburdened.general.item settings.potionAdjustments=Potion Adjustments
+
+# Chat
+chat.overburdened:injured=You have injured yourself carrying too much weight.
+chat.overburdened:injured_again=You have further injured yourself carrying too much weight.
+chat.overburdened:injured_increased=You have exacerbated your injury.
+chat.overburdened:overburdened_pickup_failed=You cannot carry any more.
+chat.overburdened:pickup_failed=You are overburdened. Interact to pick up the item.
+
+# Enchantments
+enchantment.overburdened:pack_mule=Pack Mule
+enchantment.overburdened.pack_mule.desc=Increases maximum carry weight.
+
+# Items
+item.overburdened:splint.name=Splint
+
+# Potions
+overburdened:injured=§cInjured
+description.overburdened:injured=Reduces movement and increases fall damage.
+overburdened:overburdened=§cOverburdened
+description.overburdened:overburdened=Reduces movement and increases fall damage.
+
+# Tooltips
+tooltip.overburdened:carry_weight_adjustment.info=%s%s Carry Weight
+tooltip.overburdened:carry_weight_adjustment_a1.info=%s%s Body Positivity
+tooltip.overburdened:equipped.desc=When Equipped:
+tooltip.overburdened:fluid_weight.info=Fluid Weight: %s
+tooltip.overburdened:inventory_weight.info=Inventory Weight: %s
+tooltip.overburdened:item_weight.info=Item Weight: %s
+tooltip.overburdened:splint.info=Used to stabilize and remove injuries
+tooltip.overburdened:stack_weight.info=Total Weight: %s
+
+# GroovyScript
+groovyscript.wiki.overburdened.weights.title=Item Weights
+groovyscript.wiki.overburdened.weights.description=Allows the creation of custom IIngredient item weights. Always try to use the mod configuration for item weights whenever possible. Only use this when absolutely necessary.
+groovyscript.wiki.overburdened.weights.setWeight=Adds an item weight in the format `item`, `weight`

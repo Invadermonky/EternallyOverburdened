@@ -1,0 +1,37 @@
+# Config
+overburdened.general.item settings.equipmentadjustments=Эффекты снаряжения
+overburdened.general.item settings.capabilityblacklist=Черный список возможностей
+overburdened.general.item settings.enchantmentadjustments=Эффекты зачарований
+overburdened.general.item settings.fluidweights=Вес жидкостей
+overburdened.general.item settings.itemweights=Вес предметов
+overburdened.general.item settings.potionAdjustments=Эффекты зелий
+
+# Chat
+chat.overburdened:injured=Вы получили травму перенося слишком большой вес.
+chat.overburdened:injured_again=Вы еще больше повредили себе, неся слишком большой вес.
+chat.overburdened:injured_increased=Вы усугубили свою травму.
+chat.overburdened:overburdened_pickup_failed=Вы не можете нести больше.
+chat.overburdened:pickup_failed=Вы перегружены. Взаимодействуйте чтоб поднять предмет.
+
+# Enchantments
+enchantment.overburdened:pack_mule=Вьючный мул
+enchantment.overburdened.pack_mule.desc=Повышает максимальный переносимый вес.
+
+# Items
+item.overburdened:splint.name=Шина
+
+# Potions
+overburdened:injured=§cТравма
+description.overburdened:injured=Снижает скорость передвижения и увеличивает урон от падения.
+overburdened:overburdened=§cПерегруз
+description.overburdened:overburdened=Снижает скорость передвижения и увеличивает урон от падения.
+
+# Tooltips
+tooltip.overburdened:carry_weight_adjustment.info=%s%s %s Переносимый вес
+tooltip.overburdened:carry_weight_adjustment_a1.info=%s%s Я не придумал как перевести
+tooltip.overburdened:equipped.desc=Когда надето:
+tooltip.overburdened:fluid_weight.info=Вес жидкости: %s %s
+tooltip.overburdened:inventory_weight.info=Вес в инвентаре: %s %s
+tooltip.overburdened:item_weight.info=Вес предмета: %s %s
+tooltip.overburdened:splint.info=Используется для стабилизации и устранения травм
+tooltip.overburdened:stack_weight.info=Общий вес: %s %s
