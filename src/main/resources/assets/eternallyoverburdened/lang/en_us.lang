@@ -1,3 +1,6 @@
+# Attributes
+attribute.name.thaumicwonders:carryWeight=Carry Weight
+
 # Config
 eternallyoverburdened.general.item settings.equipmentadjustments=Equipment Adjustments
 eternallyoverburdened.general.item settings.capabilityblacklist=Capability Blacklist

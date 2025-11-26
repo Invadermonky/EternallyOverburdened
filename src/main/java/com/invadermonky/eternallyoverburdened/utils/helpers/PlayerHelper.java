@@ -2,8 +2,8 @@ package com.invadermonky.eternallyoverburdened.utils.helpers;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import com.invadermonky.eternallyoverburdened.config.ConfigHandlerEO;
 import com.invadermonky.eternallyoverburdened.config.WeightSettings;
+import com.invadermonky.eternallyoverburdened.handlers.AttributeHandlerEO;
 import com.invadermonky.eternallyoverburdened.utils.PlayerCarryStats;
 import com.invadermonky.eternallyoverburdened.utils.libs.ModIds;
 import net.minecraft.entity.Entity;
@@ -48,7 +48,7 @@ public class PlayerHelper {
     }
 
     public static double getMaxCarryWeight(EntityPlayer player) {
-        double carryWeight = ConfigHandlerEO.playerSettings.maxCarryWeight;
+        double carryWeight = AttributeHandlerEO.getCarryWeight(player);
         for(ItemStack stack : player.getArmorInventoryList()) {
             carryWeight += WeightSettings.getArmorAdjustment(stack, true);
         }
