@@ -38,3 +38,4 @@ Injuries can be treated and removed by crafting and using a Splint.
 
 ## 📜 Credit and Notes
 This mod was made as an entry to the November 2025 1.12 Coalition Mod Jam.
+- New Overburdened potion icon courtesy of [Foreck1](https://www.curseforge.com/members/foreck1/projects)
