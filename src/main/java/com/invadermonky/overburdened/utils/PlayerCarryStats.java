@@ -1,8 +1,10 @@
 package com.invadermonky.overburdened.utils;
 
 import com.invadermonky.overburdened.config.ConfigHandlerEO;
+import com.invadermonky.overburdened.event.CarryWeightChangedEvent;
 import com.invadermonky.overburdened.utils.helpers.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -74,8 +76,14 @@ public class PlayerCarryStats {
 
     /** Updates the player's current and maximum carry weight values. */
     public void updateCarryStats(EntityPlayer player) {
-        this.maxCarryWeight = PlayerHelper.getMaxCarryWeight(player);
-        this.currentCarryWeight = PlayerHelper.getCurrentCarryWeight(player);
+        double newMaxWeight = PlayerHelper.getMaxCarryWeight(player);
+        double newCurrWeight = PlayerHelper.getCurrentCarryWeight(player);
+        CarryWeightChangedEvent event = new CarryWeightChangedEvent(player, this.maxCarryWeight, this.currentCarryWeight, newMaxWeight, newCurrWeight);
+        boolean isCanceled = MinecraftForge.EVENT_BUS.post(event);
+        if(!isCanceled) {
+            this.maxCarryWeight = event.getNewMaxCarryWeight();
+            this.currentCarryWeight = event.getNewCarryWeight();
+        }
     }
 
     @Override

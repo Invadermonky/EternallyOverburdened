@@ -1,4 +1,10 @@
 # Changelog
+## 1.12.2-1.1.1
+### Added
+- Added new carry weight update event handler
+
+---
+
 ## 1.12.2-1.1.0
 ### Added
 - Added new Overburdened potion icon, courtesy of [Foreck1](https://www.curseforge.com/members/foreck1/projects)
