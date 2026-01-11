@@ -16,6 +16,8 @@ Item weights are defined globally or on a per-item basis and will also include t
 
 While under the carry weight limit, players will pick up items normally. Once that limit is reached, items will no longer pick up passively and will need to be interacted with directly to pick them up. However, any amount carried over the limit will result in the player becoming overburdened.
 
+Player maximum carry weight is controlled by a player attribute value `overburdened:carry_weight`, and can be modified dynamically using the `/overburdened <target> <get|set|add|mult|reset> <value>` command.
+
 ## 💪 Overburdened
 
 ![](https://github.com/Invadermonky/EternallyOverburdened/blob/master/images/overburdened_example.png?raw=true "overburdened")
@@ -33,13 +35,6 @@ Injuries have a chance of occurring when excessive fall damage is taken while ov
 While injured, players will be afflicted with reduced movement speed, reduced jump height, and increased fall damage. If an injury is left untreated, moving around has a chance to exacerbate the injury, increasing the duration by a small amount.
 
 Injuries can be treated and removed by crafting and using a Splint.
-
----
-
-## ✨ New Features
-### Version 1.1.0+
-- Player Carry Weight is now an attribute value `overburdened:carry_weight`
-- Added command to dynamically modify player carry weight `/overburdened <target> <get|set|add|mult|reset> <value>`
 
 ---
 

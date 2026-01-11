@@ -2,6 +2,7 @@
 ## 1.12.2-1.1.1
 ### Added
 - Added new carry weight update event handler
+- Added support for HBM Nuclear Tech Crates and Ammo Bags
 
 ---
 

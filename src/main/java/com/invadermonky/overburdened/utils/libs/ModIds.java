@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 public enum ModIds {
     actually_additions(ConstIds.actually_additions),
     baubles(ConstIds.baubles),
+    hbm_nuclear(ConstIds.hbm_nuclear),
     immersive_engineering(ConstIds.immersive_engineering),
     travelers_backpack(ConstIds.travelers_backpack)
     ;
@@ -38,6 +39,7 @@ public enum ModIds {
     public static class ConstIds {
         public static final String actually_additions = "actuallyadditions";
         public static final String baubles = "baubles";
+        public static final String hbm_nuclear = "hbm";
         public static final String immersive_engineering = "immersiveengineering";
         public static final String travelers_backpack = "travelersbackpack";
     }

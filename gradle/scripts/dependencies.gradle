@@ -70,6 +70,7 @@ dependencies {
     def loadMap = [:]
 
     modMap.put(["curse.maven:actually-additions-228404:3117927"], project.use_actuallyadditions)
+    modMap.put(["curse.maven:hbm-nuclear-tech-mod-community-edition-1312314:7415696"], project.use_hbm)
     modMap.put(["curse.maven:immersive-engineering-231951:2974106"], project.use_immersiveengineering)
     modMap.put(["curse.maven:quark-rotn-edition-417392:5594720", "curse.maven:autoreglib-250363:2746011"], project.use_quark)
     modMap.put(["mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"], project.use_theoneprobe)
