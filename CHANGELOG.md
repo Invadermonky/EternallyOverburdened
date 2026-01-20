@@ -1,4 +1,10 @@
 # Changelog
+## 1.12.2-1.1.2
+### Fixed
+- Fixed a crash that when Quark is not installed
+
+---
+
 ## 1.12.2-1.1.1
 ### Added
 - Added new carry weight update event handler
