@@ -2,6 +2,7 @@
 ## 1.12.2-1.1.2
 ### Fixed
 - Fixed a crash that when Quark is not installed
+- Fixed issue parsing item ids that ended in numbers
 
 ---
 

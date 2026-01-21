@@ -252,8 +252,8 @@ public class WeightSettings {
 
     private static void parseItemWeights() {
         Map<ItemHolder, Double> map = new HashMap<>();
-        Pattern configPattern = Pattern.compile("^([^=]+?)=(-?\\d*\\.?\\d*)$");
-        Pattern itemPattern = Pattern.compile("^(.+?:.+?):?(-?\\d*)$");
+        Pattern configPattern = Pattern.compile("^(.+?)=(-?\\d*\\.?\\d*)$");
+        Pattern itemPattern = Pattern.compile("^(.+?:.+?)(?::(-?\\d*))?$");
         Pattern orePattern = Pattern.compile("^(\\w+)$");
         for(String configStr : ConfigHandlerEO.itemSettings.itemWeights) {
             try {
@@ -263,7 +263,7 @@ public class WeightSettings {
                     Matcher matcher = itemPattern.matcher(configMatcher.group(1));
                     if(matcher.find()) {
                         ResourceLocation loc = new ResourceLocation(matcher.group(1));
-                        if(!matcher.group(2).isEmpty()) {
+                        if(matcher.group(2) != null && !matcher.group(2).isEmpty()) {
                             int meta = Integer.parseInt(matcher.group(2));
                             map.put(new ItemHolder(loc, meta), weight);
                         } else {
