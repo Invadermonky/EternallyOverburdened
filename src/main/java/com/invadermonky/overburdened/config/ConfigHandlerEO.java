@@ -45,7 +45,10 @@ public class ConfigHandlerEO {
     public static class PlayerSettingsCategory {
         @Config.RangeDouble(min = 1.0, max = 1000000.0)
         @Config.Name("Max Carry Weight")
-        @Config.Comment("The maximum amount of weight a player can carry before being overburdened. Updating this value in existing worlds will require running the command /overburdened <player> reset")
+        @Config.Comment({
+                "The maximum amount of weight a player can carry before being overburdened. Updating this",
+                "value in existing worlds will require running the command /overburdened <player> reset"
+        })
         public double maxCarryWeight = 1000;
 
         @Config.RangeInt(min = 1, max = 600)
@@ -68,7 +71,8 @@ public class ConfigHandlerEO {
         @Config.Name("Capability Blacklist")
         @Config.Comment
                 ({
-                        "A blacklist of items that should not calculate values of any internal storage. An example of this would be inventory or fluid container items.",
+                        "A blacklist of items that should not calculate values of any internal storage. An example of this",
+                        "would be inventory or fluid container items.",
                         "Format:",
                         "  modid:itemid",
                         "Examples:",
@@ -80,7 +84,8 @@ public class ConfigHandlerEO {
         @Config.Name("Fluid Weights")
         @Config.Comment
                 ({
-                        "A list of fluids and their respective weights. Weights are per 1mb and can be positive or negative. Negative fluid weights will decrease the weight of other items in the player's inventory.",
+                        "A list of fluids and their respective weights. Weights are per 1mb and can be positive or negative.",
+                        "Negative fluid weights will decrease the weight of other items in the player's inventory.",
                         " Format:",
                         "  fluidname=weight",
                         " Examples:",
@@ -312,7 +317,9 @@ public class ConfigHandlerEO {
         @Config.Name("Equipment Adjustments")
         @Config.Comment
                 ({
-                        "A list of carrying capacity increases or decreases that occur when players is wearing specific armors or baubles. These value can be positive or negative.",
+                        "A list of carrying capacity increases or decreases that occur when players are wearing equipment enchanted",
+                        "with these effects. These value can be positive or negative. The enchantment level will be multiplied by",
+                        "the adjustment value.",
                         " Format: modId:itemId:meta=adjustment",
                         "  modId:itemId - the item registry name",
                         "  meta - [optional] the item metadata, leaving this value blank will match all items with this registry name",
@@ -330,7 +337,9 @@ public class ConfigHandlerEO {
         @Config.Name("Enchantment Adjustments")
         @Config.Comment
                 ({
-                        "A list of carrying capacity increases or decreases that occur when players are wearing equipment enchanted with these effects. These value can be positive or negative. The enchantment level will be multiplied by the adjustment value.",
+                        "A list of carrying capacity increases or decreases that occur when players are wearing equipment enchanted",
+                        "with these effects. These value can be positive or negative. The enchantment level will be multiplied by",
+                        "the adjustment value.",
                         " Format: enchantment=adjustment",
                         "  enchantment - the enchantment registry name",
                         "  adjustment - the carrying capacity weight adjustment, can be positive or negative or decimal values",
@@ -390,8 +399,12 @@ public class ConfigHandlerEO {
             @Config.Comment("Reduces the player's jump height while they are injured.")
             public boolean restrictJumping = true;
 
+            @Config.RangeInt(min = 0, max = 100)
             @Config.Name("Injury Damage Chance")
-            @Config.Comment("The chance the player will be damage while moving ")
+            @Config.Comment({
+                    "The chance the player will be damage if moving while injured. Setting this value",
+                    "to 0 will disable this effect."
+            })
             public int injuryDamageChance = 5;
 
             @Config.RangeInt(min = 0, max = 1000)
@@ -408,21 +421,29 @@ public class ConfigHandlerEO {
         public static class OverburdenedCategory {
             @Config.RangeInt(min = 1, max = 100000)
             @Config.Name("Weight Threshold")
-            @Config.Comment("The amount of additional weight needed to reach the next level of overburdened. Players can carry up to four times this value while being overburdened.")
+            @Config.Comment({
+                    "The amount of additional weight needed to reach the next level of overburdened.",
+                    "Players can carry up to four times this value while being overburdened."
+            })
             public int overburdenedThreshold = 150;
 
             @Config.RangeInt(min = 0, max = 100)
             @Config.Name("Fall Injury Chance")
-            @Config.Comment("The chance the player will be injured if taking fall damage while overburdened. This value is multiplied by the overburdened effect level.")
+            @Config.Comment({
+                    "The chance the player will be injured if taking fall damage while overburdened.",
+                    "This value is multiplied by the overburdened effect level. Setting this value to",
+                    "0 disables fall injuries entirely."
+            })
             public int fallInjuryChance = 20;
 
             @Config.RangeInt(min = 0, max = 100)
             @Config.Name("Movement Injury Chance")
-            @Config.Comment
-                    ({
-                            "The chance the player will be injured if moving while overburdened. This value is multiplied by the",
-                            "overburdened effect level. Movement injuries only occur when overburdened is level 3 or higher."
-                    })
+            @Config.Comment({
+                    "The chance the player will be injured if moving while overburdened. This value",
+                    "is multiplied by the overburdened effect level. Movement injuries only occur",
+                    "when overburdened is level 3 or higher. Setting this value to 0 disables",
+                    "injuries caused by overburdened movement."
+            })
             public int movementInjuryChance = 5;
 
             @Config.RangeInt(min = 0, max = 1000)
@@ -431,7 +452,10 @@ public class ConfigHandlerEO {
             public int movementInjuryDistance = 20;
 
             @Config.Name("Jump Height Restriction")
-            @Config.Comment("Reduces player jump height when overburdened. High levels of overburdened will prevent jumping altogether.")
+            @Config.Comment({
+                    "Reduces player jump height when overburdened. High levels of overburdened will",
+                    "prevent jumping altogether."
+            })
             public boolean restrictJump = true;
         }
     }

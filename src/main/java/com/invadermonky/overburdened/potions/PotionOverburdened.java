@@ -36,16 +36,19 @@ public class PotionOverburdened extends AbstractEOPotion {
             if (amplifier >= 2) {
                 holder.updateDistanceMoved();
                 if (holder.getDistanceMoved() >= ConfigHandlerEO.potionSettings.overburdened.movementInjuryDistance) {
-                    int chance = (amplifier - 1) * ConfigHandlerEO.potionSettings.overburdened.movementInjuryChance;
-                    if (chance > 0 && entityLiving.world.rand.nextInt(100) < chance) {
-                        String messageKey = entityLiving.isPotionActive(ModPotionsEO.INJURED) ? "injured_again" : "injured";
-                        entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, 9600, 0, true, false));
-                        entityLiving.attackEntityFrom(DamageSource.GENERIC, 1.0f);
-                        if (entityLiving instanceof EntityPlayer) {
-                            ((EntityPlayer) entityLiving).sendStatusMessage(StringHelper.getTranslatedComponent(messageKey, "chat"), true);
+                    int chance = ConfigHandlerEO.potionSettings.overburdened.movementInjuryChance;
+                    if (chance > 0) {
+                        chance *= (amplifier - 1);
+                        if (chance > 0 && entityLiving.world.rand.nextInt(100) < chance) {
+                            String messageKey = entityLiving.isPotionActive(ModPotionsEO.INJURED) ? "injured_again" : "injured";
+                            entityLiving.addPotionEffect(new PotionEffect(ModPotionsEO.INJURED, 9600, 0, true, false));
+                            entityLiving.attackEntityFrom(DamageSource.GENERIC, 1.0f);
+                            if (entityLiving instanceof EntityPlayer) {
+                                ((EntityPlayer) entityLiving).sendStatusMessage(StringHelper.getTranslatedComponent(messageKey, "chat"), true);
+                            }
                         }
+                        holder.resetDistanceMoved();
                     }
-                    holder.resetDistanceMoved();
                 }
             } else {
                 holder.resetDistanceMoved();
