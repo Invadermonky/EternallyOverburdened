@@ -1,4 +1,11 @@
 # Changelog
+### Added
+- Added Iron Chests shulker box compat
+### Fixed
+- Fixed broken `ru_ru.lang` language keys
+
+---
+
 ## 1.12.2-1.1.2
 ### Fixed
 - Fixed a crash that when Quark is not installed

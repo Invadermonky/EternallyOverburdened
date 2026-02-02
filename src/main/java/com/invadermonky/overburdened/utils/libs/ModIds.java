@@ -8,6 +8,7 @@ public enum ModIds {
     baubles(ConstIds.baubles),
     hbm_nuclear(ConstIds.hbm_nuclear),
     immersive_engineering(ConstIds.immersive_engineering),
+    iron_chests(ConstIds.iron_chests),
     travelers_backpack(ConstIds.travelers_backpack)
     ;
 
@@ -41,6 +42,7 @@ public enum ModIds {
         public static final String baubles = "baubles";
         public static final String hbm_nuclear = "hbm";
         public static final String immersive_engineering = "immersiveengineering";
+        public static final String iron_chests = "ironchest";
         public static final String travelers_backpack = "travelersbackpack";
     }
 }
