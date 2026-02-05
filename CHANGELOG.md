@@ -3,6 +3,7 @@
 - Added Iron Chests shulker box compat
 ### Fixed
 - Fixed broken `ru_ru.lang` language keys
+- Fixed player max carry weight resetting on death
 
 ---
 
