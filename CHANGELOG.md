@@ -1,4 +1,5 @@
 # Changelog
+## 1.12.2-1.1.3
 ### Added
 - Added Iron Chests shulker box compat
 ### Fixed
