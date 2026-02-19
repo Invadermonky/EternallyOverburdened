@@ -1,4 +1,10 @@
 # Changelog
+## 1.12.2-1.1.4
+### Fixed
+- Fixed edge-case ItemHandler capability causing items to weigh more than they should
+
+---
+
 ## 1.12.2-1.1.3
 ### Added
 - Added Iron Chests shulker box compat

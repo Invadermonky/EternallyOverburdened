@@ -134,8 +134,8 @@ public class WeightSettings {
             } else if (stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                 IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
                 if (handler != null) {
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack slotStack = handler.getStackInSlot(i);
+                    for (int slot = 0; slot < handler.getSlots(); slot++) {
+                        ItemStack slotStack = handler.extractItem(slot, handler.getSlotLimit(slot), true);
                         weight += getItemStackWeight(slotStack);
                     }
                 }
