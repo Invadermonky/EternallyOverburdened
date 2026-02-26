@@ -2,7 +2,9 @@ package com.invadermonky.overburdened.handlers;
 
 import com.invadermonky.overburdened.EternallyOverburdened;
 import com.invadermonky.overburdened.config.ConfigHandlerEO;
-import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -30,7 +32,7 @@ public class AttributeHandlerEO {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if(event.isWasDeath() && !event.isCanceled()) {
+        if(!event.isCanceled()) {
             EntityPlayer original = event.getOriginal();
             IAttributeInstance originalCarryWeight = original.getEntityAttribute(CARRY_WEIGHT);
             if(originalCarryWeight != null) {
