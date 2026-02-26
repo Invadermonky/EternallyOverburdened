@@ -1,5 +1,7 @@
 # Changelog
 ## 1.12.2-1.1.4
+### Added
+- Added `zh_cn.lang` courtesy of [19300000](https://github.com/19300000)
 ### Fixed
 - Fixed edge-case ItemHandler capability causing items to weigh more than they should
 

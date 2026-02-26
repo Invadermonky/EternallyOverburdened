@@ -1,0 +1,56 @@
+# 属性
+attribute.name.overburdened:carry_weight=负重能力
+
+# 指令
+command.overburdened:carry_weight.add=基础负重已增加至：%s
+command.overburdened:carry_weight.get=当前基础负重：%s
+command.overburdened:carry_weight.mult=基础负重已设为：%s
+command.overburdened:carry_weight.reset=基础负重已重置为：%s
+command.overburdened:carry_weight.set=基础负重已设为：%s
+command.overburdened:fatal=发生致命错误。玩家 %s 的负重属性未初始化
+command.overburdened:invalid=无效指令用法。输入 /help overburdened 查看语法
+command.overburdened:unknown_action=未知操作：%s
+command.overburdened.usage=用法：/overburdened <目标> <get|set|add|mult|reset> <数值>
+
+# 配置
+overburdened.general.item settings.equipmentadjustments=装备调整
+overburdened.general.item settings.capabilityblacklist=能力黑名单
+overburdened.general.item settings.enchantmentadjustments=附魔调整
+overburdened.general.item settings.fluidweights=流体重量
+overburdened.general.item settings.itemweights=物品重量
+overburdened.general.item settings.potionAdjustments=药水效果调整
+
+# 聊天
+chat.overburdened:injured=因负重过大，你伤到了自己。
+chat.overburdened:injured_again=因负重过大，你的伤势加重了。
+chat.overburdened:injured_increased=你的伤情恶化了。
+chat.overburdened:overburdened_pickup_failed=你已无法携带更多物品。
+chat.overburdened:pickup_failed=你已负重过量。请交互以拾起物品。
+
+# 附魔
+enchantment.overburdened:pack_mule=驮兽
+enchantment.overburdened.pack_mule.desc=增加最大负重能力。
+
+# 物品
+item.overburdened:splint.name=夹板
+
+# 药水效果
+overburdened:injured=§c受伤
+description.overburdened:injured=降低移动速度并增加坠落伤害。
+overburdened:overburdened=§c负重过量
+description.overburdened:overburdened=降低移动速度并增加坠落伤害。
+
+# 工具提示
+tooltip.overburdened:carry_weight_adjustment.info=%s%s 负重能力
+tooltip.overburdened:carry_weight_adjustment_a1.info=%s%s 身体积极性
+tooltip.overburdened:equipped.desc=装备时：
+tooltip.overburdened:fluid_weight.info=流体重量：%s
+tooltip.overburdened:inventory_weight.info=物品栏重量：%s
+tooltip.overburdened:item_weight.info=物品重量：%s
+tooltip.overburdened:splint.info=用于固定和消除伤势
+tooltip.overburdened:stack_weight.info=总重量：%s
+
+# GroovyScript
+groovyscript.wiki.overburdened.weights.title=物品重量
+groovyscript.wiki.overburdened.weights.description=允许创建自定义 IIngredient 物品重量。尽可能优先使用模组配置来设置物品重量。仅在绝对必要时使用此方法。
+groovyscript.wiki.overburdened.weights.setWeight=按照格式 `物品`、`重量` 添加物品重量
