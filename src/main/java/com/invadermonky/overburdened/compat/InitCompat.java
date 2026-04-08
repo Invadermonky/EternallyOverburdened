@@ -7,21 +7,22 @@ import com.invadermonky.overburdened.compat.hbm.HBMCapabilityHandler;
 import com.invadermonky.overburdened.compat.immersiveengineering.IECapabilityHandler;
 import com.invadermonky.overburdened.compat.ironchests.IronChestCapabilityHandler;
 import com.invadermonky.overburdened.compat.travelersbackpack.TravelersBackpackCapabilityHandler;
+import com.invadermonky.overburdened.config.ConfigHandlerEO;
 import com.invadermonky.overburdened.utils.libs.ModIds;
 
 public class InitCompat {
     public static void registerCustomHandlers() {
         //Minecraft
         OverburdenedAPI.registerCustomCapabilityHandler(new ShulkerBoxCapabilityHandler());
-        if (ModIds.actually_additions.isLoaded)
+        if (ModIds.actually_additions.isLoaded && ConfigHandlerEO.modIntegration.enableActuallyAdditions)
             OverburdenedAPI.registerCustomCapabilityHandler(new ItemBagCapabilityHandler());
-        if (ModIds.hbm_nuclear.isLoaded)
+        if (ModIds.hbm_nuclear.isLoaded && ConfigHandlerEO.modIntegration.enableHBM)
             OverburdenedAPI.registerCustomCapabilityHandler(new HBMCapabilityHandler());
-        if (ModIds.immersive_engineering.isLoaded)
+        if (ModIds.immersive_engineering.isLoaded && ConfigHandlerEO.modIntegration.enableIE)
             OverburdenedAPI.registerCustomCapabilityHandler(new IECapabilityHandler());
-        if (ModIds.iron_chests.isLoaded)
+        if (ModIds.iron_chests.isLoaded && ConfigHandlerEO.modIntegration.enableIronChests)
             OverburdenedAPI.registerCustomCapabilityHandler(new IronChestCapabilityHandler());
-        if (ModIds.travelers_backpack.isLoaded)
+        if (ModIds.travelers_backpack.isLoaded && ConfigHandlerEO.modIntegration.enableTravelersBackpack)
             OverburdenedAPI.registerCustomCapabilityHandler(new TravelersBackpackCapabilityHandler());
     }
 }

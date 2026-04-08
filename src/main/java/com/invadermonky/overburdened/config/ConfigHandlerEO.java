@@ -15,6 +15,8 @@ public class ConfigHandlerEO {
     public static ItemWeightsCategory itemSettings = new ItemWeightsCategory();
     @Config.Name("Enchantment Settings")
     public static EnchantmentCategory enchantmentSettings = new EnchantmentCategory();
+    @Config.Name("Mod Integration")
+    public static ModIntegrationCategory modIntegration = new ModIntegrationCategory();
     @Config.Name("Potion Settings")
     public static PotionEffectsCategory potionSettings = new PotionEffectsCategory();
     @Config.Name("Player Settings")
@@ -388,6 +390,28 @@ public class ConfigHandlerEO {
             @Config.Comment("The amount of bonus carry weight granted by the Pack Mule enchant.")
             public double carryWeightBonus = 100;
         }
+    }
+    
+    public static class ModIntegrationCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Actually Additions")
+        public boolean enableActuallyAdditions = true;
+
+        @Config.RequiresMcRestart
+        @Config.Name("HBM's Nuclear Tech")
+        public boolean enableHBM = true;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Immersive Engineering")
+        public boolean enableIE = true;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Iron Chests")
+        public boolean enableIronChests = true;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Travelers Backpack")
+        public boolean enableTravelersBackpack = true;
     }
 
     public static class PotionEffectsCategory {
