@@ -1,4 +1,10 @@
 # Changelog
+## 1.12.2-1.1.5
+### Added
+- Added configuration toggles for mod integrations
+
+---
+
 ## 1.12.2-1.1.4
 ### Added
 - Added `zh_cn.lang` courtesy of [19300000](https://github.com/19300000)
