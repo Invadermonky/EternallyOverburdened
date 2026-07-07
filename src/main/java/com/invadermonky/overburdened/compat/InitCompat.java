@@ -3,6 +3,7 @@ package com.invadermonky.overburdened.compat;
 import com.invadermonky.overburdened.api.OverburdenedAPI;
 import com.invadermonky.overburdened.api.custom.ShulkerBoxCapabilityHandler;
 import com.invadermonky.overburdened.compat.actuallyadditions.ItemBagCapabilityHandler;
+import com.invadermonky.overburdened.compat.bundles.BundlesCapabilityHandler;
 import com.invadermonky.overburdened.compat.hbm.HBMCapabilityHandler;
 import com.invadermonky.overburdened.compat.immersiveengineering.IECapabilityHandler;
 import com.invadermonky.overburdened.compat.ironchests.IronChestCapabilityHandler;
@@ -16,6 +17,8 @@ public class InitCompat {
         OverburdenedAPI.registerCustomCapabilityHandler(new ShulkerBoxCapabilityHandler());
         if (ModIds.actually_additions.isLoaded && ConfigHandlerEO.modIntegration.enableActuallyAdditions)
             OverburdenedAPI.registerCustomCapabilityHandler(new ItemBagCapabilityHandler());
+        if (ModIds.bundles.isLoaded && ConfigHandlerEO.modIntegration.enableBundles)
+            OverburdenedAPI.registerCustomCapabilityHandler(new BundlesCapabilityHandler());
         if (ModIds.hbm_nuclear.isLoaded && ConfigHandlerEO.modIntegration.enableHBM)
             OverburdenedAPI.registerCustomCapabilityHandler(new HBMCapabilityHandler());
         if (ModIds.immersive_engineering.isLoaded && ConfigHandlerEO.modIntegration.enableIE)
