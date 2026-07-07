@@ -1,4 +1,14 @@
 # Changelog
+## 1.12.2-1.1.5
+### Added
+- Added Bundles Backport compat
+- Added config option to hide tooltip for items with 0 weight
+- Added config option to hide encumbrance bar when carry weight is 0
+- Added config option to allow players to pick up items normally regardless of encumbrance
+- Added config option to set player interaction item pickup reach distance
+
+---
+
 ## 1.12.2-1.1.4
 ### Added
 - Added configuration toggles for mod integrations
