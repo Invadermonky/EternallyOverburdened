@@ -1,7 +1,8 @@
 # Changelog
-## 1.12.2-1.1.5
+## 1.12.2-1.2.0
 ### Added
 - Added Bundles Backport compat
+- Added GregTech CE Unofficial compat
 - Added config option to hide tooltip for items with 0 weight
 - Added config option to hide encumbrance bar when carry weight is 0
 - Added config option to allow players to pick up items normally regardless of encumbrance

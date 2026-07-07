@@ -7,6 +7,7 @@ public enum ModIds {
     actually_additions(ConstIds.actually_additions),
     baubles(ConstIds.baubles),
     bundles(ConstIds.bundles),
+    gregtech(ConstIds.gregtech),
     hbm_nuclear(ConstIds.hbm_nuclear),
     immersive_engineering(ConstIds.immersive_engineering),
     iron_chests(ConstIds.iron_chests),
@@ -42,6 +43,7 @@ public enum ModIds {
         public static final String actually_additions = "actuallyadditions";
         public static final String baubles = "baubles";
         public static final String bundles = "bundles";
+        public static final String gregtech = "gregtech";
         public static final String hbm_nuclear = "hbm";
         public static final String immersive_engineering = "immersiveengineering";
         public static final String iron_chests = "ironchest";

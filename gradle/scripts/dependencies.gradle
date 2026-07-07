@@ -35,16 +35,6 @@ repositories {
             includeGroup 'CraftTweaker2'
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                url "https://maven.tterrag.com"
-            }
-        }
-        filter {
-            includeGroup 'mcjty.theoneprobe'
-        }
-    }
     mavenLocal() // Must be last for caching to work
 }
 
@@ -54,8 +44,6 @@ dependencies {
     // Include OSXNarratorBlocker by default for the dev env, for M1+ Macs
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
     compileOnly 'org.jetbrains:annotations:24.1.0'
-
-    runtimeOnly rfg.deobf("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17")
 
     implementation 'mezz:jei:4.27.3'
     implementation rfg.deobf('curse.maven:baubles-227083:2518667')
@@ -71,6 +59,7 @@ dependencies {
 
     modMap.put(["curse.maven:actually-additions-228404:3117927"], project.use_actuallyadditions)
     modMap.put(["curse.maven:bundles-backport-902861:6339953"], project.use_bundles)
+    modMap.put(["curse.maven:gregtech-ce-unofficial-557242:5519022", "curse.maven:codechicken-lib-1-8-242818:2779848"], project.use_gregtechceu)
     modMap.put(["curse.maven:hbm-nuclear-tech-mod-community-edition-1312314:7892802", "curse.maven:ctm-267602:2915363", "curse.maven:mixin-booter-419286:7049694"], project.use_hbm)
     modMap.put(["curse.maven:immersive-engineering-231951:2974106"], project.use_immersiveengineering)
     modMap.put(["curse.maven:iron-chests-228756:2747935"], project.use_ironchests)

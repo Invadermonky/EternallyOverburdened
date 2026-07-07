@@ -422,6 +422,10 @@ public class ConfigHandlerEO {
         public boolean enableBundles = true;
 
         @Config.RequiresMcRestart
+        @Config.Name("GregTech CE Unofficial")
+        public boolean enableGTCEU = true;
+
+        @Config.RequiresMcRestart
         @Config.Name("HBM's Nuclear Tech")
         public boolean enableHBM = true;
 
