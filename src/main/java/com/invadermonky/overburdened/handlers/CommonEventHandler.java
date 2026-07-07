@@ -166,7 +166,7 @@ public class CommonEventHandler {
             double itemWeight = WeightSettings.getSingleItemWeight(stack);
             double stackWeight = itemWeight * stack.getCount();
             double remaining = stats.getRemainingWeight(false);
-            if(remaining < stackWeight) {
+            if(remaining < stackWeight && !ConfigHandlerEO.playerSettings.alwaysPickUp) {
                 if(remaining >= itemWeight) {
                     int toAdd = (int) (remaining / itemWeight);
                     ItemStack copy = stack.copy();

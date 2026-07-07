@@ -23,6 +23,14 @@ public class ConfigHandlerEO {
     public static PlayerSettingsCategory playerSettings = new PlayerSettingsCategory();
 
     public static class ClientSettingsCategory {
+        @Config.Name("Hide 0 Weight Tooltip")
+        @Config.Comment("Hides the weight tooltip when an item has a weight of 0.")
+        public boolean hideTooltip = false;
+
+        @Config.Name("Hide 0 Weight Overlay")
+        @Config.Comment("Hides the HUD encumbrance bar when the player's carry weight is 0.")
+        public boolean hideEncumbranceBar = false;
+
         @Config.Name("Overlay X Offset")
         @Config.Comment("The HUD encumbrance bar x offset.")
         public int overlayXOffset = 10;
@@ -45,6 +53,10 @@ public class ConfigHandlerEO {
     }
 
     public static class PlayerSettingsCategory {
+        @Config.Name("Always Pick Up Items")
+        @Config.Comment("Players will always pick up items normally regardless of whether they are overburdened.")
+        public boolean alwaysPickUp = false;
+
         @Config.RangeDouble(min = 1.0, max = 1000000.0)
         @Config.Name("Max Carry Weight")
         @Config.Comment({
@@ -52,6 +64,14 @@ public class ConfigHandlerEO {
                 "value in existing worlds will require running the command /overburdened <player> reset"
         })
         public double maxCarryWeight = 1000;
+
+        @Config.RangeDouble(min = 0, max = 10.0)
+        @Config.Name("Pick Up Reach Distance")
+        @Config.Comment({
+                "The distance a player can reach when attempting to pick up an item using the right-click",
+                "interaction. A value of 0 will default to the player reach distance attribute value."
+        })
+        public double reachDistance = 0;
 
         @Config.RangeInt(min = 1, max = 600)
         @Config.Name("Update Interval")
@@ -396,6 +416,10 @@ public class ConfigHandlerEO {
         @Config.RequiresMcRestart
         @Config.Name("Actually Additions")
         public boolean enableActuallyAdditions = true;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Bundles Backport")
+        public boolean enableBundles = true;
 
         @Config.RequiresMcRestart
         @Config.Name("HBM's Nuclear Tech")

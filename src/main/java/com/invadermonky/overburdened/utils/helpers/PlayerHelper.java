@@ -2,6 +2,7 @@ package com.invadermonky.overburdened.utils.helpers;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import com.invadermonky.overburdened.config.ConfigHandlerEO;
 import com.invadermonky.overburdened.config.WeightSettings;
 import com.invadermonky.overburdened.handlers.AttributeHandlerEO;
 import com.invadermonky.overburdened.utils.PlayerCarryStats;
@@ -100,7 +101,10 @@ public class PlayerHelper {
     @Nullable
     public static RayTraceResult getClosestItemRayTrace(EntityPlayer player, boolean useLiquids) {
         World world = player.world;
-        double reach = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+        double reach = ConfigHandlerEO.playerSettings.reachDistance;
+        if(reach <= 0)
+            reach = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+
         Vec3d origin = player.getPositionEyes(1.0f);
         RayTraceResult result = rayTrace(world, player, reach, useLiquids);
         if(result != null) {

@@ -59,26 +59,28 @@ public class ClientEventHandler {
                 }
             }
             double stackWeight = WeightSettings.getItemStackWeight(stack);
-            tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), StringHelper.getFormattedWeight(stackWeight)));
-            if (GuiScreen.isShiftKeyDown()) {
-                ICustomItemWeight customWeight = WeightSettings.getCustomItemWeight(stack);
-                ICustomCapabilityHandler customHandler = WeightSettings.getCustomCapabilityHandler(stack);
-                double itemWeight = WeightSettings.getItemWeight(stack);
-                double inventoryWeight = WeightSettings.getItemHandlerCapabilityWeight(stack, customHandler);
-                double fluidWeight = WeightSettings.getFluidHandlerCapabilityWeight(stack, customHandler);
+            if(stackWeight > 0 || !ConfigHandlerEO.clientSettings.hideTooltip) {
+                tooltip.add(I18n.format(StringHelper.getTranslationKey("stack_weight", "tooltip", "info"), StringHelper.getFormattedWeight(stackWeight)));
+                if (GuiScreen.isShiftKeyDown()) {
+                    ICustomItemWeight customWeight = WeightSettings.getCustomItemWeight(stack);
+                    ICustomCapabilityHandler customHandler = WeightSettings.getCustomCapabilityHandler(stack);
+                    double itemWeight = WeightSettings.getItemWeight(stack);
+                    double inventoryWeight = WeightSettings.getItemHandlerCapabilityWeight(stack, customHandler);
+                    double fluidWeight = WeightSettings.getFluidHandlerCapabilityWeight(stack, customHandler);
 
-                tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("item_weight", "tooltip", "info"), StringHelper.getFormattedWeight(itemWeight)));
-                if(inventoryWeight > 0) {
-                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("inventory_weight", "tooltip", "info"), StringHelper.getFormattedWeight(inventoryWeight)));
-                }
-                if(fluidWeight > 0) {
-                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("fluid_weight", "tooltip", "info"), StringHelper.getFormattedWeight(fluidWeight)));
-                }
-                if(customWeight != null) {
-                    List<String> extraWeights = new ArrayList<>();
-                    customWeight.getCustomTooltipWeights(stack, extraWeights);
-                    for(String extraWeight : extraWeights) {
-                        tooltip.add(" ┠> " + extraWeight);
+                    tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("item_weight", "tooltip", "info"), StringHelper.getFormattedWeight(itemWeight)));
+                    if (inventoryWeight > 0) {
+                        tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("inventory_weight", "tooltip", "info"), StringHelper.getFormattedWeight(inventoryWeight)));
+                    }
+                    if (fluidWeight > 0) {
+                        tooltip.add(" ┠> " + I18n.format(StringHelper.getTranslationKey("fluid_weight", "tooltip", "info"), StringHelper.getFormattedWeight(fluidWeight)));
+                    }
+                    if (customWeight != null) {
+                        List<String> extraWeights = new ArrayList<>();
+                        customWeight.getCustomTooltipWeights(stack, extraWeights);
+                        for (String extraWeight : extraWeights) {
+                            tooltip.add(" ┠> " + extraWeight);
+                        }
                     }
                 }
             }
@@ -113,6 +115,9 @@ public class ClientEventHandler {
 
     private static void renderCarryWeightBar(Minecraft minecraft, ScaledResolution scaledResolution, EntityPlayer player) {
         PlayerCarryStats stats = PlayerHelper.getPlayerCarryStats(player);
+        if(stats.getCurrentCarryWeight() <= 0 && ConfigHandlerEO.clientSettings.hideEncumbranceBar)
+            return;
+
         boolean reversed = ConfigHandlerEO.clientSettings.overlayReverseDirection;
         boolean isInWater = !player.isCreative() && player.isInsideOfMaterial(Material.WATER) && ConfigHandlerEO.clientSettings.offsetInWater;
         int height = scaledResolution.getScaledHeight();
